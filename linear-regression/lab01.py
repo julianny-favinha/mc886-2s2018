@@ -20,8 +20,7 @@ def verbose_cost(thetas, xs, ys):
 		if i < m-1:
 			print("({} - {})^2 + ".format(hypothesis(thetas, xs[i]), ys[i][0]), end="")
 		else:
-			print("({} - {})^2".format(hypothesis(thetas, xs[i]), ys[i][0]), end="")
-	print(")")
+			print("({} - {})^2)".format(hypothesis(thetas, xs[i]), ys[i][0]))
 
 """ 
 TESTE

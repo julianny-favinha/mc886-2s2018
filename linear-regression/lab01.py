@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 def hypothesis(thetas, xs):
 	return np.sum([t*x for t, x in zip(thetas, xs)])
 
-def cost_function(thetas, xs, ys):
+def cost(thetas, xs, ys):
 	m = len(xs)
 	sum = 0
 	
@@ -13,9 +13,9 @@ def cost_function(thetas, xs, ys):
 	
 	return (1/(2*m)) * sum
 
-def verbose_cost_function(thetas, xs, ys):
+def verbose_cost(thetas, xs, ys):
 	m = len(xs)
-	print("cost function = (1/(2*{}))(".format(m), end="")
+	print("cost = (1/(2*{}))(".format(m), end="")
 	for i in range(m):
 		if i < m-1:
 			print("({} - {})^2 + ".format(hypothesis(thetas, xs[i]), ys[i][0]), end="")
@@ -42,5 +42,5 @@ ys = np.array([[6], [8], [5]])
 h = [hypothesis(thetas, x) for x in xs]
 
 print("htheta(xs) = {}".format(h))
-verbose_cost_function(thetas, xs, ys)
-print("cost_function = {}".format(cost_function(thetas, xs, ys)))
+verbose_cost(thetas, xs, ys)
+print("cost = {}".format(cost(thetas, xs, ys)))

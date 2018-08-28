@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import math
+
 class BatchGradientDescent:
 	"""
 		Attributes
@@ -17,7 +18,7 @@ class BatchGradientDescent:
 		self.learningRate = lr
 
 	"""
-		Clculates the hypotesis based on coeficients
+		Calculates the hypotesis based on coeficients
 	"""
 	def hypothesis(self, thetas, xs):
 		return np.sum([t*x for t, x in zip(thetas, xs)])
@@ -71,9 +72,11 @@ class BatchGradientDescent:
 	"""
 		
 	"""
-	def normalEq(self):
-		print("normalEq not implemented")
-		pass
+	def normalEq(self, xs, ys):
+		 # theta = inverse(Xt * X) * Xt * y
+		xst = xs.transpose()
+		inverse = np.linalg.inv(xst.dot(xs))
+		return (inverse.dot(xst)).dot(ys)
 	
 	#----------------------------------------------------------------------------------------------
 	
@@ -92,11 +95,12 @@ if __name__ == "__main__":
 	thetas = np.array([0.5, 2])
 	xs = np.array([[1, 3], [1, 3.5], [1, 2]])
 	ys = np.array([6, 8, 5])
-	
+
 	#h = [hypothesis(thetas, x) for x in xs]
 	#print("htheta(xs) = {}".format(h))
 	#verbose_cost(thetas, xs, ys)
 	#print("cost = {}".format(cost(thetas, xs, ys)))
-	aux = BatchGradientDescent(1000,0.1)
-	aux.fit(xs, ys,thetas)
-	print(aux.coeficients)
+	bgd = BatchGradientDescent(1000,0.1)
+	bgd.fit(xs, ys, thetas)
+	print(bgd.coeficients)
+	print(bgd.normalEq(xs, ys))

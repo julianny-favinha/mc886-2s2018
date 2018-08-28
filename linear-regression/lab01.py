@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
+import matplotlib.pyplot as plt
 import math
 
 class BatchGradientDescent:
@@ -24,7 +25,7 @@ class BatchGradientDescent:
 		return np.sum([t*x for t, x in zip(thetas, xs)])
 
 	"""
-		
+		Function to calculate mean squared error
 	"""
 	def cost(self, thetas, xs, ys):
 		m = len(xs)
@@ -36,7 +37,7 @@ class BatchGradientDescent:
 		return (1/(2*m)) * sum
 
 	"""
-		
+		Literal cost to view equation
 	"""
 	def verbose_cost(self, thetas, xs, ys):
 		m = len(xs)
@@ -48,7 +49,7 @@ class BatchGradientDescent:
 				print("({} - {})^2)".format(self.hypothesis(thetas, xs[i]), ys[i]))
 
 	"""
-		
+		Find coefficients of hypothesis using Gradient Descent
 	"""
 	def fit(self, xs, ys, initialGuess):
 		thetas = initialGuess
@@ -70,7 +71,7 @@ class BatchGradientDescent:
 		self.coeficients = thetas
 
 	"""
-		
+		Normal Equation method to find coeffiecients of hypothesis
 	"""
 	def normalEq(self, xs, ys):
 		 # theta = inverse(Xt * X) * Xt * y
@@ -93,14 +94,26 @@ if __name__ == "__main__":
 	1		 2		 5
 	"""
 	thetas = np.array([0.5, 2])
-	xs = np.array([[1, 3], [1, 3.5], [1, 2]])
-	ys = np.array([6, 8, 5])
+	xs = np.array([[1, 3], [1, 3.5], [1, 2], [1, 7]])
+	ys = np.array([6, 8, 5, 9])
 
-	#h = [hypothesis(thetas, x) for x in xs]
-	#print("htheta(xs) = {}".format(h))
-	#verbose_cost(thetas, xs, ys)
-	#print("cost = {}".format(cost(thetas, xs, ys)))
-	bgd = BatchGradientDescent(1000,0.1)
-	bgd.fit(xs, ys, thetas)
-	print(bgd.coeficients)
-	print(bgd.normalEq(xs, ys))
+	# cost by number of iterations
+	iterations = np.array([1, 10, 100, 1000, 10000, 100000])
+	cost = []
+
+	for it in iterations:
+		bgd = BatchGradientDescent(it, 0.1)
+		bgd.fit(xs, ys, thetas)
+		batch_coef = bgd.coeficients
+		cost.append(bgd.cost(batch_coef, xs, ys))
+
+	plt.plot(iterations, cost, color="blue")
+	plt.xticks(iterations)
+	plt.xlabel("Number of iterations")
+	plt.yticks()
+	plt.ylabel("Cost")
+	plt.show()
+
+	# normal equation
+	bgd_normalEq = BatchGradientDescent()
+	normalEq_coef = bgd_normalEq.normalEq()

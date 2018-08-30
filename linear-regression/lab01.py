@@ -12,7 +12,7 @@ class BatchGradientDescent:
 	
 	"""
 		Constructor, initializes number of iterations and learning rate 
-		Will default do 1000 iterations and learning Rate 1
+		Will default do 100 iterations and learning Rate 0.5
 	"""
 	def __init__(self, numIt=100, lr=0.5):
 		self.maxIteration = numIt

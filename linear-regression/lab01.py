@@ -3,6 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import math
 
+from parsediamondsset import get_data
+
 class BatchGradientDescent:
 	"""
 		Attributes
@@ -72,9 +74,9 @@ class BatchGradientDescent:
 
 	"""
 		Normal Equation method to find coeffiecients of hypothesis
+		theta = inverse(Xt * X) * Xt * y
 	"""
 	def normalEq(self, xs, ys):
-		 # theta = inverse(Xt * X) * Xt * y
 		xst = xs.transpose()
 		inverse = np.linalg.inv(xst.dot(xs))
 		return (inverse.dot(xst)).dot(ys)
@@ -98,9 +100,10 @@ if __name__ == "__main__":
 	ys = np.array([6, 8, 5, 9])
 
 	# cost by number of iterations
-	iterations = np.array([1, 10, 100, 1000, 10000, 100000])
+	iterations = np.array([1000, 100000, 100000])
 	cost = []
 
+	# TODO: como usar o conjunto de validacao (teste)?
 	for it in iterations:
 		bgd = BatchGradientDescent(it, 0.1)
 		bgd.fit(xs, ys, thetas)

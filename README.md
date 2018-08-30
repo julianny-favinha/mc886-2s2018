@@ -8,3 +8,7 @@ Prof. Sandra Avila
 
 156059 - Julianny Favinha Donda
 155976 - José Henrique Pinto
+
+
+Using Diamonds dataset from Kaggle:
+https://www.kaggle.com/shivam2503/diamonds

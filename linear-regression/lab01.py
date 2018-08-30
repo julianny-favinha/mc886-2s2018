@@ -9,7 +9,7 @@ class BatchGradientDescent:
 	"""
 		Attributes
 	"""
-	coeficients = None
+	coefficients = None
 	intercept = None
 	
 	"""
@@ -21,7 +21,7 @@ class BatchGradientDescent:
 		self.learningRate = lr
 
 	"""
-		Calculates the hypotesis based on coeficients
+		Calculates the hypotesis based on coefficients
 	"""
 	def hypothesis(self, thetas, xs):
 		return np.sum([t*x for t, x in zip(thetas, xs)])
@@ -70,7 +70,7 @@ class BatchGradientDescent:
 				currentThetas[j] += thetas[j] - (self.learningRate * (1/m) * somatoria)
 	
 			thetas = currentThetas
-		self.coeficients = thetas
+		self.coefficients = thetas
 
 	"""
 		Normal Equation method to find coeffiecients of hypothesis
@@ -82,34 +82,38 @@ class BatchGradientDescent:
 		return (inverse.dot(xst)).dot(ys)
 	
 	#----------------------------------------------------------------------------------------------
-	
+
+def appendX0(xs):
+	xs_aux = np.empty((0,2), int)
+	for x in xs:
+		new_x = np.insert(x, 0, 1)
+		xs_aux = np.append(xs_aux, np.array([new_x]), axis=0)
+
+	return xs_aux
+
 if __name__ == "__main__":
-	""" 
-	usando variaveis x0 e x1 (sendo que x0 é sempre 1)
-	suponha que encontrei a hipotese htheta(x) = 0.5*x0 + 2*x1
-	ou seja, parametros sao theta0 = 0.5 e theta1 = 2
-	
-	tabela de dados
-	x0		x1		y
-	1		 3		 6
-	1		 3.5	 8
-	1		 2		 5
-	"""
 	thetas = np.array([0.5, 2])
-	xs = np.array([[1, 3], [1, 3.5], [1, 2], [1, 7]])
+	
+	# TODO: xs possui uma feature. adicionamos os x0 = 1 para todas as linhas
+	xs = appendX0(np.array([[3], [3.5], [2], [7]]))
+
 	ys = np.array([6, 8, 5, 9])
 
-	# cost by number of iterations
-	iterations = np.array([1000, 100000, 100000])
+	# apply BGD to some number of iterations
+	iterations = np.array([1, 1000, 100000, 1000000])
 	cost = []
 
 	# TODO: como usar o conjunto de validacao (teste)?
 	for it in iterations:
+		print("Applying BGD for", it, "iterations...")
 		bgd = BatchGradientDescent(it, 0.1)
 		bgd.fit(xs, ys, thetas)
-		batch_coef = bgd.coeficients
+		batch_coef = bgd.coefficients
+		print("Coefficients:", batch_coef)
 		cost.append(bgd.cost(batch_coef, xs, ys))
+		print()
 
+	# plot cost x number of iterations graph
 	plt.plot(iterations, cost, color="blue")
 	plt.xticks(iterations)
 	plt.xlabel("Number of iterations")
@@ -118,5 +122,7 @@ if __name__ == "__main__":
 	plt.show()
 
 	# normal equation
+	print("Applying Normal Equation...")
 	bgd_normalEq = BatchGradientDescent()
-	normalEq_coef = bgd_normalEq.normalEq()
+	normalEq_coef = bgd_normalEq.normalEq(xs, ys)
+	print("Coefficients:", normalEq_coef)

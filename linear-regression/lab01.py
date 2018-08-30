@@ -3,7 +3,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import math
 
-from ParseDiamondsSet import get_data
 from BatchGradientDescent import BatchGradientDescent
 
 def append_x0(xs):

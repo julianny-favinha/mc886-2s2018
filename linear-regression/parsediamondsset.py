@@ -6,8 +6,8 @@ def get_data():
 	file = pd.read_csv("diamonds.csv")
 
 	# get variables carat and price
-	feature_carat = file["carat"]
-	feature_price = file["price"]
+	feat_carat = file["carat"]
+	feat_price = file["price"]
 
 	# carat is x
 	feat_carat_train = feat_carat[:-8091]

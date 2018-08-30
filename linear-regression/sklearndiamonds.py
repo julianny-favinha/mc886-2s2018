@@ -12,17 +12,20 @@ feature_carat = file["carat"]
 feature_price = file["price"]
 
 # carat is x
-feature_carat_train = feature_carat[:-10000]
-feature_carat_validation = feature_carat[-10000:]
+feature_carat_train = feature_carat[:-8091]
+feature_carat_validation = feature_carat[-8091:]
 
 # price is y
-feature_price_train = feature_price[:-10000]
-feature_price_validation = feature_price[-10000:]
+feature_price_train = feature_price[:-8091]
+feature_price_validation = feature_price[-8091:]
 
+print("Applying SGDRegressor...")
 regr = linear_model.SGDRegressor(max_iter=100000, eta0=0.1)
 
+print("Applying fit...")
 regr.fit((feature_carat_train.values).reshape(-1, 1), feature_price_train.values)
 
+print("Applying prediction...")
 feature_price_pred = regr.predict((feature_carat_validation.values).reshape(-1, 1))
 
 # The coefficients

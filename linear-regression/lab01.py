@@ -40,30 +40,32 @@ def append_x0(xs):
 	return xs_aux
 
 if __name__ == "__main__":
-	start_time = time.time()
-
 	feat_carat_train, feat_carat_validation, feat_price_train, feat_price_validation = parse_diamonds_set()
 
 	# starting with random thetas
 	thetas = np.array([0.5, 2])
 	
 	# TODO: xs possui uma feature. adicionamos os x0 = 1 para todas as linhas
-	#xs = append_x0(np.array([[3], [3.5], [2], [7]]))
 	xs = append_x0(feat_carat_train)
+	#xs = append_x0(np.array([[3], [3.5], [2], [7]]))
 
 	ys = feat_price_train
+	#ys = np.array([6, 8, 5, 9])
 
 	# apply BGD to some number of iterations
-	iterations = np.array([1, 10, 100, 1000])
+	iterations = np.array([100000])
 	cost = []
 
 	for it in iterations:
+		start_time = time.time()
 		print("Applying BGD for", it, "iterations...")
 		bgd = BatchGradientDescent(it, 0.1)
 		bgd.fit(xs, ys, thetas)
 		batch_coef = bgd.coefficients
 		print("Coefficients:", batch_coef)
 		cost.append(bgd.cost(batch_coef, xs, ys))
+		elapsed_time = time.time() - start_time
+		print("Elapsed time: %1f s" %(elapsed_time))
 		print()
 
 	# plot cost x number of iterations graph
@@ -78,8 +80,5 @@ if __name__ == "__main__":
 	bgd_normalEq = BatchGradientDescent()
 	normalEq_coef = bgd_normalEq.normalEq(xs, ys)
 	print("Coefficients:", normalEq_coef)
-
-	elapsed_time = time.time() - start_time
-	print("Elapsed time: %1f s" %(elapsed_time))
 
 	plt.show()

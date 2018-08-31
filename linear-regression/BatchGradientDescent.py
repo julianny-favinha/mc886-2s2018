@@ -1,5 +1,4 @@
 import numpy as np
-import math
 
 class BatchGradientDescent:
 	"""
@@ -20,7 +19,7 @@ class BatchGradientDescent:
 		Calculates the hypotesis based on coefficients
 	"""
 	def hypothesis(self, thetas, xs):
-		return np.sum([t*x for t, x in zip(thetas, xs)])
+		return np.sum(thetas * xs)
 
 	"""
 		Function to calculate mean squared error
@@ -37,7 +36,7 @@ class BatchGradientDescent:
 	"""
 		Literal cost to view equation
 	"""
-	def verbose_cost(self, thetas, xs, ys):
+	def verboseCost(self, thetas, xs, ys):
 		m = len(xs)
 		print("cost = (1/(2*{}))(".format(m), end="")
 		for i in range(m):
@@ -46,26 +45,24 @@ class BatchGradientDescent:
 			else:
 				print("({} - {})^2)".format(self.hypothesis(thetas, xs[i]), ys[i]))
 
+	def descent(self, h, ys, xs):
+		totalSum = np.dot(h - ys, xs)
+
+		isNanOrIsInf = np.any(np.logical_or(np.isnan(totalSum), np.isinf(totalSum)))
+		if isNanOrIsInf:
+			raise ValueError("Exception: sum is infinite or not a number.")
+
+		return self.learningRate * (1/len(xs)) * totalSum
+
 	"""
 		Find coefficients of hypothesis using Gradient Descent
 	"""
 	def fit(self, xs, ys, initialGuess):
 		thetas = initialGuess
 		for _ in range(self.maxIteration):
-			h = [self.hypothesis(thetas, x) for x in xs]
-			n = len(thetas)
-			currentThetas = np.empty(n, dtype=np.float64)
-			for j in range(n):
-				currentThetas[j] = 0
-				somatoria = 0
-				m = len(xs)
-				for i in range(m):
-					somatoria += (h[i] - ys[i]) * xs[i][j]
-				if math.isnan(somatoria) or math.isinf(somatoria):
-					raise ValueError("somatória se tornou infinita!")
-				currentThetas[j] += thetas[j] - (self.learningRate * (1/m) * somatoria)
+			h = np.sum(xs * thetas, axis=1)
+			thetas = thetas - self.descent(h, ys, xs)
 	
-			thetas = currentThetas
 		self.coefficients = thetas
 
 	"""

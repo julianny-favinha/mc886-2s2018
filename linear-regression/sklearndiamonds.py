@@ -1,10 +1,13 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import time
 from sklearn import datasets, linear_model
 from sklearn.metrics import mean_squared_error
 
 from parsediamondsset import get_data
+
+start_time = time.time()
 
 # get variables carat and price
 feat_carat_train, feat_carat_validation, feat_price_train, feat_price_validation = get_data()
@@ -30,5 +33,8 @@ plt.plot(feat_carat_validation, feat_price_pred, color='blue', linewidth=3)
 
 plt.xticks()
 plt.yticks()
+
+elapsed_time = time.time() - start_time
+print("Elapsed time: %1f s" %(elapsed_time))
 
 plt.show()

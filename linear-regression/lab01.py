@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import math
+import time
 
 from BatchGradientDescent import BatchGradientDescent
 
@@ -39,6 +40,8 @@ def append_x0(xs):
 	return xs_aux
 
 if __name__ == "__main__":
+	start_time = time.time()
+
 	feat_carat_train, feat_carat_validation, feat_price_train, feat_price_validation = parse_diamonds_set()
 
 	# starting with random thetas
@@ -54,7 +57,6 @@ if __name__ == "__main__":
 	iterations = np.array([1, 10, 100, 1000])
 	cost = []
 
-	# TODO: como usar o conjunto de validacao (teste)?
 	for it in iterations:
 		print("Applying BGD for", it, "iterations...")
 		bgd = BatchGradientDescent(it, 0.1)
@@ -70,10 +72,14 @@ if __name__ == "__main__":
 	plt.xlabel("Number of iterations")
 	plt.yticks()
 	plt.ylabel("Cost")
-	plt.show()
 
 	# normal equation
 	print("Applying Normal Equation...")
 	bgd_normalEq = BatchGradientDescent()
 	normalEq_coef = bgd_normalEq.normalEq(xs, ys)
 	print("Coefficients:", normalEq_coef)
+
+	elapsed_time = time.time() - start_time
+	print("Elapsed time: %1f s" %(elapsed_time))
+
+	plt.show()

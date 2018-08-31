@@ -1,9 +1,34 @@
 # -*- coding: utf-8 -*-
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 import math
 
 from BatchGradientDescent import BatchGradientDescent
+
+"""
+	45849 -> training (35849 training and 10000 validation)
+	8091 -> test
+"""
+def parse_diamonds_set():
+	file = pd.read_csv("diamonds.csv")
+
+	feat_carat = file["carat"]
+	feat_price = file["price"]
+
+	# carat is x
+	feat_carat_train = feat_carat[:-8091]
+	feat_carat_validation = feat_carat_train[-10000:]
+	feat_carat_train = feat_carat_train[:-10000]
+	feat_carat_test = feat_carat[-8091:]
+
+	# price is y
+	feat_price_train = feat_price[:-8091]
+	feat_price_validation = feat_price_train[-10000:]
+	feat_price_train = feat_price_train[:-10000]
+	feat_price_test = feat_price[-8091:]
+
+	return feat_carat_train, feat_carat_validation, feat_price_train, feat_price_validation
 
 def append_x0(xs):
 	xs_aux = np.empty((0,2), int)
@@ -14,15 +39,19 @@ def append_x0(xs):
 	return xs_aux
 
 if __name__ == "__main__":
+	feat_carat_train, feat_carat_validation, feat_price_train, feat_price_validation = parse_diamonds_set()
+
+	# starting with random thetas
 	thetas = np.array([0.5, 2])
 	
 	# TODO: xs possui uma feature. adicionamos os x0 = 1 para todas as linhas
-	xs = append_x0(np.array([[3], [3.5], [2], [7]]))
+	#xs = append_x0(np.array([[3], [3.5], [2], [7]]))
+	xs = append_x0(feat_carat_train)
 
-	ys = np.array([6, 8, 5, 9])
+	ys = feat_price_train
 
 	# apply BGD to some number of iterations
-	iterations = np.array([1, 1000, 100000, 100000])
+	iterations = np.array([1, 10, 100, 1000])
 	cost = []
 
 	# TODO: como usar o conjunto de validacao (teste)?

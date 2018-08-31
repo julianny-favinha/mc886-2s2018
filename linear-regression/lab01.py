@@ -6,32 +6,9 @@ import math
 import time
 
 from BatchGradientDescent import BatchGradientDescent
+from ParseDiamondsSet import parse_diamonds_set
 
-"""
-	45849 -> training (35849 training and 10000 validation)
-	8091 -> test
-"""
-def parse_diamonds_set():
-	file = pd.read_csv("diamonds.csv")
-
-	feat_carat = file["carat"]
-	feat_price = file["price"]
-
-	# carat is x
-	feat_carat_train = feat_carat[:-8091]
-	feat_carat_validation = feat_carat_train[-10000:]
-	feat_carat_train = feat_carat_train[:-10000]
-	feat_carat_test = feat_carat[-8091:]
-
-	# price is y
-	feat_price_train = feat_price[:-8091]
-	feat_price_validation = feat_price_train[-10000:]
-	feat_price_train = feat_price_train[:-10000]
-	feat_price_test = feat_price[-8091:]
-
-	return feat_carat_train, feat_carat_validation, feat_price_train, feat_price_validation
-
-def append_x0(xs):
+def appendX0(xs):
 	xs_aux = np.empty((0,2), int)
 	for x in xs:
 		new_x = np.insert(x, 0, 1)
@@ -42,28 +19,32 @@ def append_x0(xs):
 if __name__ == "__main__":
 	feat_carat_train, feat_carat_validation, feat_price_train, feat_price_validation = parse_diamonds_set()
 
-	# starting with random thetas
+	# start with some thetas
 	thetas = np.array([0.5, 2])
 	
 	# TODO: xs possui uma feature. adicionamos os x0 = 1 para todas as linhas
-	xs = append_x0(feat_carat_train)
-	#xs = append_x0(np.array([[3], [3.5], [2], [7]]))
+	xs = appendX0(feat_carat_train)
 
 	ys = feat_price_train
-	#ys = np.array([6, 8, 5, 9])
+
+	thetas = np.array([0.5, 2])
+	xs = np.array([[1, 3], [1, 3.5], [1, 2]])
+	ys = np.array([6, 8, 5])
 
 	# apply BGD to some number of iterations
-	iterations = np.array([100000])
+	iterations = np.array([10000, 1000000, 100000000])
 	cost = []
 
 	for it in iterations:
 		start_time = time.time()
 		print("Applying BGD for", it, "iterations...")
-		bgd = BatchGradientDescent(it, 0.1)
+		bgd = BatchGradientDescent(it, 0.01)
 		bgd.fit(xs, ys, thetas)
 		batch_coef = bgd.coefficients
 		print("Coefficients:", batch_coef)
-		cost.append(bgd.cost(batch_coef, xs, ys))
+		batch_cost = bgd.cost(batch_coef, xs, ys)
+		print("Cost:", batch_cost)
+		cost.append(batch_cost)
 		elapsed_time = time.time() - start_time
 		print("Elapsed time: %1f s" %(elapsed_time))
 		print()

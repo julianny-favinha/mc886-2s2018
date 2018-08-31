@@ -5,12 +5,12 @@ import time
 from sklearn import datasets, linear_model
 from sklearn.metrics import mean_squared_error
 
-from parsediamondsset import get_data
+from ParseDiamondsSet import parse_diamonds_set
 
 start_time = time.time()
 
 # get variables carat and price
-feat_carat_train, feat_carat_validation, feat_price_train, feat_price_validation = get_data()
+feat_carat_train, feat_carat_validation, feat_price_train, feat_price_validation = parse_diamonds_set()
 
 print("Applying SGDRegressor...")
 regr = linear_model.SGDRegressor(max_iter=100000, eta0=0.1)

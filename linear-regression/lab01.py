@@ -6,43 +6,37 @@ import math
 import time
 
 from BatchGradientDescent import BatchGradientDescent
-from ParseDiamondsSet import parse_diamonds_set
-
-def appendX0(xs):
-	xs_aux = np.empty((0,2), int)
-	for x in xs:
-		new_x = np.insert(x, 0, 1)
-		xs_aux = np.append(xs_aux, np.array([new_x]), axis=0)
-
-	return xs_aux
+from ParseDiamondsSet import numberVariables
 
 if __name__ == "__main__":
-	feat_carat_train, feat_carat_validation, feat_price_train, feat_price_validation = parse_diamonds_set()
+	xs_train, xs_validation, xs_test, ys_train, ys_validation, ys_test = numberVariables()
 
 	# start with some thetas
-	thetas = np.array([0.5, 2])
+	thetas = np.array([0.5, 2, 3, 4, 1.5, 6, 6])
 	
-	# TODO: xs possui uma feature. adicionamos os x0 = 1 para todas as linhas
-	xs = appendX0(feat_carat_train)
+	# insert column x0 of 1s
+	xs_train.insert(loc=0, column="x0", value=np.ones(xs_train.shape[0]))
+	xs_validation.insert(loc=0, column="x0", value=np.ones(xs_validation.shape[0]))
+	xs_test.insert(loc=0, column="x0", value=np.ones(xs_test.shape[0]))
 
-	ys = feat_price_train
-
-	thetas = np.array([0.5, 2])
-	xs = np.array([[1, 3], [1, 3.5], [1, 2]])
-	ys = np.array([6, 8, 5])
+	# normal equation
+	print("Applying Normal Equation...")
+	bgd_normalEq = BatchGradientDescent()
+	normalEq_coef = bgd_normalEq.normalEq(xs_train, ys_train)
+	print("Coefficients:", normalEq_coef)
 
 	# apply BGD to some number of iterations
-	iterations = np.array([10000, 1000000, 100000000])
+	iterations = range(100, 100000, 1000)
 	cost = []
 
 	for it in iterations:
 		start_time = time.time()
 		print("Applying BGD for", it, "iterations...")
-		bgd = BatchGradientDescent(it, 0.01)
-		bgd.fit(xs, ys, thetas)
+		bgd = BatchGradientDescent(it, 0.0001)
+		bgd.fit(xs_train.values, ys_train, thetas)
 		batch_coef = bgd.coefficients
 		print("Coefficients:", batch_coef)
-		batch_cost = bgd.cost(batch_coef, xs, ys)
+		batch_cost = bgd.cost(batch_coef, xs_validation.values, ys_validation.values)
 		print("Cost:", batch_cost)
 		cost.append(batch_cost)
 		elapsed_time = time.time() - start_time
@@ -51,15 +45,9 @@ if __name__ == "__main__":
 
 	# plot cost x number of iterations graph
 	plt.plot(iterations, cost, color="blue")
-	plt.xticks(iterations)
+	plt.xticks()
 	plt.xlabel("Number of iterations")
 	plt.yticks()
 	plt.ylabel("Cost")
-
-	# normal equation
-	print("Applying Normal Equation...")
-	bgd_normalEq = BatchGradientDescent()
-	normalEq_coef = bgd_normalEq.normalEq(xs, ys)
-	print("Coefficients:", normalEq_coef)
 
 	plt.show()

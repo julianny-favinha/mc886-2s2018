@@ -9,6 +9,7 @@ file_name = input("Input file name of model: ")
 
 with open (file_name, 'rb') as fp:
 	coeffs = pickle.load(fp)
+	print(coeffs)
     
 	xs_test, y_test = getTestSet()
 

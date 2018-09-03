@@ -11,7 +11,7 @@ from ParseDiamondsSet import getTrainingSet
 from Cost import cost
 
 if __name__ == "__main__":
-	learning_rate = 0.0001
+	learning_rate = 0.1
 	xs_train, ys_train, xs_validation, ys_validation = getTrainingSet()
 	
 	# insert column x0 of 1s

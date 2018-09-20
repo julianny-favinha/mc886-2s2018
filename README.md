@@ -1,6 +1,4 @@
-# mc886-2s2018
-
-## MC886 - Machine Learning and Pattern Recognition - UNICAMP
+# MC886 - Machine Learning and Pattern Recognition - UNICAMP
 
 Second semester of 2018
 

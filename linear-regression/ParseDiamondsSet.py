@@ -7,7 +7,7 @@ import pandas as pd
 	carat, depth, table, x, y, z
 	price 
 """
-def numberVariables():
+def getSet():
 	file = pd.read_csv("diamonds.csv")
 
 	xs = file.drop(file.columns[file.columns.str.contains("unnamed", case = False)], axis=1)
@@ -29,4 +29,14 @@ def numberVariables():
 	y_train = y_aux_train[:-10000]
 	y_test = y[-8091:]
 
-	return xs_train, xs_validation, xs_test, y_train, y_validation, y_test
+	return xs_train, y_train, xs_validation, y_validation, xs_test, y_test
+
+def getTrainingSet():
+	xs_train, y_train, xs_validation, y_validation, xs_test, y_test = getSet()
+
+	return xs_train, y_train, xs_validation, y_validation
+
+def getTestSet():
+	xs_train, y_train, xs_validation, y_validation, xs_test, y_test = getSet()
+
+	return xs_test, y_test

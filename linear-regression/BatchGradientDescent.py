@@ -15,36 +15,6 @@ class BatchGradientDescent:
 		self.maxIteration = numIt
 		self.learningRate = lr
 
-	"""
-		Calculates the hypotesis based on coefficients
-	"""
-	def hypothesis(self, thetas, xs):
-		return np.sum(thetas * xs)
-
-	"""
-		Function to calculate mean squared error
-	"""
-	def cost(self, thetas, xs, ys):
-		m = len(xs)
-		sum = 0
-		
-		for i in range(m):
-			sum += (self.hypothesis(thetas, xs[i]) - ys[i]) ** 2
-		
-		return (1/(2*m)) * sum
-
-	"""
-		Literal cost to view equation
-	"""
-	def verboseCost(self, thetas, xs, ys):
-		m = len(xs)
-		print("cost = (1/(2*{}))(".format(m), end="")
-		for i in range(m):
-			if i < m-1:
-				print("({} - {})^2 + ".format(self.hypothesis(thetas, xs[i]), ys[i]), end="")
-			else:
-				print("({} - {})^2)".format(self.hypothesis(thetas, xs[i]), ys[i]))
-
 	def descent(self, h, ys, xs):
 		totalSum = np.dot(h - ys, xs)
 
@@ -64,12 +34,3 @@ class BatchGradientDescent:
 			thetas = thetas - self.descent(h, ys, xs)
 	
 		self.coefficients = thetas
-
-	"""
-		Normal Equation method to find coeffiecients of hypothesis
-		theta = inverse(Xt * X) * Xt * y
-	"""
-	def normalEq(self, xs, ys):
-		xst = xs.transpose()
-		inverse = np.linalg.inv(xst.dot(xs))
-		return (inverse.dot(xst)).dot(ys)

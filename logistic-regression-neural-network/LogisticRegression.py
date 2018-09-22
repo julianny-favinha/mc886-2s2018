@@ -19,7 +19,7 @@ class LogisticRegression:
 	"""
 		Uses model (coefficients) to predict y given x
 	"""
-	def predict(self, xs, ys):
+	def predict(self, xs):
 		print("Performing predictions...")
 
 		predictions = []

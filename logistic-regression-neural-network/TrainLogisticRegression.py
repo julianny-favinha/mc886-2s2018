@@ -35,6 +35,7 @@ if __name__ == "__main__":
 
 		lr = LogisticRegression()
 		lr.fit(x_original_train, y_train)
-		lr.predict(x_original_validation, y_original_validation)
+		predictions = lr.predict(x_original_validation, y_original_validation)
+		print(predictions)
 
 		print("Elapsed time: %1f s" %(elapsed_time))

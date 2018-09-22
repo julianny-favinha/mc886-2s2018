@@ -1,3 +1,5 @@
+import numpy as np
+
 def derivative(h, ys, xs, learningRate):
 	totalSum = np.dot(h - ys, xs)
 
@@ -10,8 +12,8 @@ def derivative(h, ys, xs, learningRate):
 def descent(initialGuess, model, x, y, learningRate):
 	thetas = initialGuess
 	
-	for _ in range(self.maxIteration):
-		h = np.sum(xs * thetas, axis=1)
-		thetas = thetas - derivative(h, ys, xs)
+	for _ in range(1000): # MELHORAR: quantas iteracoes?
+		h = np.sum(x * thetas, axis=1)
+		thetas = thetas - derivative(h, y, x)
 
 	return thetas

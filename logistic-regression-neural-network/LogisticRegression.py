@@ -8,10 +8,10 @@ class LogisticRegression:
 		Find coefficients
 	"""
 	def fit(self, x, y, options={}):
-		print("fit")
+		print("Performing fit...")
 
-		initialGuess = np.ones(len(x)) # MELHORAR: quais valores de theta comecar?
-		learningRate = 0.1 # MELHORAR: qual valor?
+		initialGuess = np.ones(x.shape[1]) # MELHORAR: quais valores de theta comecar?
+		learningRate = 0.00001 # MELHORAR: qual valor?
 
 		self.coefficients = descent(initialGuess, self.coefficients, x, y, learningRate)
 		print(self.coefficients)
@@ -20,5 +20,5 @@ class LogisticRegression:
 		Uses model (coefficients) to predict y given x
 	"""
 	def predict(x):
-		print("predict")
+		print("Performing predictions...")
 		return 1 / (1 + np.exp(-np.sum(coefficients * x)))

@@ -1,7 +1,7 @@
 import numpy as np
 
 def hypothesis(thetas, xs):
-	return np.sum(thetas * xs)
+	return 1 / (1 + np.exp(-np.sum(thetas * xs)))
 
 def cost(thetas, xs, ys):
 	m = len(xs)

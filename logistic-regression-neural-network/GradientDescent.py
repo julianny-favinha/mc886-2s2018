@@ -14,6 +14,6 @@ def descent(initialGuess, model, x, y, learningRate):
 	
 	for _ in range(1000): # MELHORAR: quantas iteracoes?
 		h = np.sum(x * thetas, axis=1)
-		thetas = thetas - derivative(h, y, x)
+		thetas = thetas - derivative(h, y, x, learningRate)
 
 	return thetas

@@ -2,7 +2,13 @@ import numpy as np
 from GradientDescent import descent
 
 class LogisticRegression:
-	coefficients = None # MELHORAR
+	coefficients = None
+
+	@staticmethod
+	def sigmoid(coefficients, xs):
+		return 1 / (1 + np.exp(-np.dot(coefficients, xs.T)))
+
+	model = sigmoid
 
 	"""
 		Find coefficients
@@ -11,10 +17,10 @@ class LogisticRegression:
 		print("Performing fit...")
 
 		initialGuess = np.ones(x.shape[1]) # MELHORAR: quais valores de theta comecar?
-		learningRate = 0.0000001 # MELHORAR: qual valor?
+		learningRate = 0.01 # MELHORAR: qual valor?
+		iterations = 1000 # MELHORAR: quantas iterações?
 
-		self.coefficients = descent(initialGuess, self.coefficients, x, y, learningRate)
-		print(self.coefficients)
+		self.coefficients = descent(initialGuess, self.model, x, y, learningRate, iterations)
 
 	"""
 		Uses model (coefficients) to predict y given x
@@ -22,10 +28,4 @@ class LogisticRegression:
 	def predict(self, xs):
 		print("Performing predictions...")
 
-		predictions = []
-
-		for i in range(xs.shape[0]):
-			predictions.append(1 / (1 + np.exp(-np.sum(self.coefficients * xs[i]))))
-			
-		return predictions
-
+		return self.model(self.coefficients, xs)

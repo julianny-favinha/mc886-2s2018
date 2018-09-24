@@ -7,13 +7,13 @@ def derivative(h, ys, xs, learningRate):
 	if isNanOrIsInf:
 		raise ValueError("Exception: sum is infinite or not a number.")
 
-	return learningRate * (1/len(xs)) * totalSum
+	return learningRate * (1 / xs.shape[0]) * totalSum
 
-def descent(initialGuess, model, x, y, learningRate):
+def descent(initialGuess, model, x, y, learningRate, iterations):
 	thetas = initialGuess
 	
-	for _ in range(1000): # MELHORAR: quantas iteracoes?
-		h = 1 / (1 + np.exp(-np.sum(thetas * x, axis=1)))
+	for _ in range(iterations):
+		h = model(thetas, x)
 		thetas = thetas - derivative(h, y, x, learningRate)
 
 	return thetas

@@ -24,7 +24,7 @@ if __name__ == "__main__":
 	x_original_validation, y_original_validation = x_original_train[-10000:], y_original_train[-10000:]
 	x_original_train, y_original_train = x_original_train[:-10000], y_original_train[:-10000]
 
-        x_original_train = x_original_train / 255
+	x_original_train = x_original_train / 255
 	x_original_validation = x_original_validation / 255
 
 	x_original_train = np.c_[np.ones(x_original_train.shape[0]), x_original_train]

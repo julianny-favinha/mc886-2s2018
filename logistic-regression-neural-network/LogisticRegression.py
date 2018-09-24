@@ -1,4 +1,5 @@
 import numpy as np
+
 from GradientDescent import descent
 
 class LogisticRegression:
@@ -17,8 +18,8 @@ class LogisticRegression:
 		print("Performing fit for label {}...".format(label))
 
 		initialGuess = np.ones(x.shape[1]) # MELHORAR: quais valores de theta comecar?
-		learningRate = 0.1 # MELHORAR: qual valor?
-		iterations = 100 # MELHORAR: quantas iterações?
+		learningRate = 0.001 # MELHORAR: qual valor?
+		iterations = 1000 # MELHORAR: quantas iterações?
 
 		self.coefficients = descent(initialGuess, self.model, x, y, learningRate, iterations)
 

@@ -2,8 +2,6 @@ import numpy as np
 import mnist_reader
 import time
 
-# from sklearn.preprocessing import MinMaxScaler
-# from skimage import io, color, measure, exposure
 import matplotlib.pyplot as plt
 
 from LogisticRegression import LogisticRegression
@@ -26,11 +24,7 @@ if __name__ == "__main__":
 	x_original_validation, y_original_validation = x_original_train[-10000:], y_original_train[-10000:]
 	x_original_train, y_original_train = x_original_train[:-10000], y_original_train[:-10000]
 
-	# scaling images
-	# scaler = MinMaxScaler()
-	# scaler.fit(x_original_train.astype(float))
-	# x_original_train = scaler.transform(x_original_train.astype(float))
-	# x_original_validation = scaler.transform(x_original_validation.astype(float))
+        x_original_train = x_original_train / 255
 	x_original_validation = x_original_validation / 255
 
 	x_original_train = np.c_[np.ones(x_original_train.shape[0]), x_original_train]

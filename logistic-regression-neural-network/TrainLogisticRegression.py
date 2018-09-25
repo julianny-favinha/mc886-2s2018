@@ -19,47 +19,61 @@ labels = {0: "T-shirt/top",
 			8: "Bag",
 			9: "Ankle boot"}
 
+"""
+	Suppose we want to predict if it is l label or not. Then
+	1) Change all labels == l to 1
+	2) Change all labels != l to 0
+	"""
+def toggle_class(x, label):
+	y = x.copy()
+	y[x == label] = 1
+	y[x != label] = 0
+
+	return y
+
 if __name__ == "__main__":
+	# get the training data
 	x_original_train, y_original_train = mnist_reader.load_mnist('fashion-mnist/data/fashion', kind='train')
 	x_original_validation, y_original_validation = x_original_train[-10000:], y_original_train[-10000:]
 	x_original_train, y_original_train = x_original_train[:-10000], y_original_train[:-10000]
 
+	# pixels normalized to [0, 1] interval
 	x_original_train = x_original_train / 255
 	x_original_validation = x_original_validation / 255
 
+	# add 1 column to x
 	x_original_train = np.c_[np.ones(x_original_train.shape[0]), x_original_train]
 	x_original_validation = np.c_[np.ones(x_original_validation.shape[0]), x_original_validation]
 
-	lr = LogisticRegression()
+	# initial values
+	initialGuess = np.ones(x_original_train.shape[1])
+	learningRate = 0.01
+	iterations = 1000
 
 	predictions = np.array([])
+	cost_iterations = []
 	for label in labels:
 		start_time = time.time()
 
-		"""
-			Suponha que queremos predizer se eh uma label l ou nao. Entao devemos
-			1) Trocar todas as labels == l por 1
-			2) Trocar todas as labels != l por 0
-		"""
-		y_train = y_original_train.copy()
-		y_train[y_original_train == label] = 1
-		y_train[y_original_train != label] = 0
+		lr = LogisticRegression()
 
-		lr.fit(x_original_train, y_train, labels[label])
+		y_train = toggle_class(y_original_train, label)
 
-		y_validation = y_original_validation.copy()
-		y_validation[y_original_validation == label] = 1
-		y_validation[y_original_validation != label] = 0
+		cost_iterations = lr.fit(x_original_train, y_train, labels[label], initialGuess, learningRate, iterations)
+
+		plt.plot([x for x in range(iterations)], cost_iterations, color="blue")
+		plt.title("Logistic Regression for label {} with learningRate = {}".format(labels[label], learningRate))
+		plt.savefig("CostGraph" + labels[label].replace("/", "-"))
+		plt.xlabel("Number of iterations")
+		plt.ylabel("Cost")
+		plt.clf()
+
+		y_validation = toggle_class(y_original_validation, label)
 
 		predictions = np.append(predictions, lr.predict(x_original_validation, labels[label]))
 
 		elapsed_time = time.time() - start_time
 		print("Elapsed time: %1f s" %(elapsed_time))
-
-	# print(labels.keys())
-	# print(cost_list)
-	# plt.plot(labels.keys(), cost_list, color="blue")
-	# plt.savefig("CostGraph")
 
 	predictions = predictions.reshape(len(labels.keys()), x_original_validation.shape[0])
 

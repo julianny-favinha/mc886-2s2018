@@ -14,14 +14,12 @@ class LogisticRegression:
 	"""
 		Find coefficients
 	"""
-	def fit(self, x, y, label, options={}):
+	def fit(self, x, y, label, initialGuess, learningRate, iterations):
 		print("Performing fit for label {}...".format(label))
 
-		initialGuess = np.ones(x.shape[1]) # MELHORAR: quais valores de theta comecar?
-		learningRate = 0.001 # MELHORAR: qual valor?
-		iterations = 1000 # MELHORAR: quantas iterações?
+		self.coefficients, cost_iterations = descent(initialGuess, self.model, x, y, learningRate, iterations)
 
-		self.coefficients = descent(initialGuess, self.model, x, y, learningRate, iterations)
+		return cost_iterations
 
 	"""
 		Uses model (coefficients) to predict y given x

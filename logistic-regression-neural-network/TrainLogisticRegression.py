@@ -1,23 +1,23 @@
 import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
 import mnist_reader
 import time
 
-import matplotlib.pyplot as plt
-
 from LogisticRegression import LogisticRegression
-
+from ErrorMetrics import conffusion_matrix, normalized_accuracy
 from Cost import cost
 
-labels = {0: "T-shirt/top",
-			1: "Trouser",
-			2: "Pullover",
-			3: "Dress",
-			4: "Coat",
-			5: "Sandal",
-			6: "Shirt",
-			7: "Sneaker",
-			8: "Bag",
-			9: "Ankle boot"}
+labels = {0: "T-shirt/top", 
+ 			1: "Trouser", 
+ 			2: "Pullover", 
+ 			3: "Dress", 
+ 			4: "Coat", 
+ 			5: "Sandal", 
+ 			6: "Shirt", 
+ 			7: "Sneaker", 
+ 			8: "Bag",
+ 			9: "Ankle boot"}
 
 """
 	Suppose we want to predict if it is l label or not. Then
@@ -59,6 +59,7 @@ if __name__ == "__main__":
 
 		y_train = toggle_class(y_original_train, label)
 
+		# train
 		cost_iterations = lr.fit(x_original_train, y_train, labels[label], initialGuess, learningRate, iterations)
 
 		plt.plot([x for x in range(iterations)], cost_iterations, color="blue")
@@ -70,7 +71,13 @@ if __name__ == "__main__":
 
 		y_validation = toggle_class(y_original_validation, label)
 
-		predictions = np.append(predictions, lr.predict(x_original_validation, labels[label]))
+		# predict
+		predicted = lr.predict(x_original_validation, labels[label])
+		predictions = np.append(predictions, predicted)
+
+		# error metrics
+		print(conffusion_matrix(labels[label], predicted, y_validation))
+		print("Normalized accuracy: {0:.1f}%".format(normalized_accuracy(predicted, y_validation)*100))
 
 		elapsed_time = time.time() - start_time
 		print("Elapsed time: %1f s" %(elapsed_time))

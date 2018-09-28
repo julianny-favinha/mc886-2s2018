@@ -14,10 +14,10 @@ class LogisticRegression:
 	"""
 		Find coefficients
 	"""
-	def fit(self, x, y, label, initialGuess, learningRate, iterations):
+	def fit(self, x, y, label, initialGuess, learningRate, iterations, costFunction):
 		print("Performing fit for label {}...".format(label))
 
-		self.coefficients, cost_iterations = descent(initialGuess, self.model, x, y, learningRate, iterations)
+		self.coefficients, cost_iterations = descent(initialGuess, self.model, x, y, learningRate, iterations, costFunction)
 
 		return cost_iterations
 

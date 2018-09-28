@@ -6,7 +6,7 @@ import time
 
 from LogisticRegression import LogisticRegression
 from ErrorMetrics import conffusion_matrix, normalized_accuracy
-from Cost import cost
+from Cost import lr_cost
 
 labels = {0: "T-shirt/top", 
  			1: "Trouser", 
@@ -60,7 +60,7 @@ if __name__ == "__main__":
 		y_train = toggle_class(y_original_train, label)
 
 		# train
-		cost_iterations = lr.fit(x_original_train, y_train, labels[label], initialGuess, learningRate, iterations)
+		cost_iterations = lr.fit(x_original_train, y_train, labels[label], initialGuess, learningRate, iterations, lr_cost)
 
 		plt.plot([x for x in range(iterations)], cost_iterations, color="blue")
 		plt.title("Logistic Regression for label {} with learningRate = {}".format(labels[label], learningRate))

@@ -1,10 +1,12 @@
 import numpy as np
+import matplotlib.pyplot as plt
 import mnist_reader
 import time
 
 from MultinomialLogisticRegression import MultinomialLogisticRegression
+from Cost import cross_entropy
 
-"""labels = {0: "T-shirt/top", 
+labels = {0: "T-shirt/top", 
  			1: "Trouser", 
  			2: "Pullover", 
  			3: "Dress", 
@@ -13,26 +15,7 @@ from MultinomialLogisticRegression import MultinomialLogisticRegression
  			6: "Shirt", 
  			7: "Sneaker", 
  			8: "Bag",
- 			9: "Ankle boot"}"""
-
-labels = {0: "T-shirt/top",
-			1: "Trouser"}
-
-def score(coefficients, x):
-	scores = np.array([])
-	for coef in coefficients:
-		print(np.sum(coef * x))
-		scores = np.append(scores, np.sum(coef * x))
-
-	return scores
-
-def softmax(scores):
-	predictions = np.array([])
-	sum_exponential = np.sum(np.exp(scores))
-	for score in scores:
-		predictions.append(np.exp(score) / sum_exponential)
-
-	return predictions
+ 			9: "Ankle boot"}
 
 """
 	Suppose we want to predict if it is l label or not. Then
@@ -61,27 +44,29 @@ if __name__ == "__main__":
 	x_original_validation = np.c_[np.ones(x_original_validation.shape[0]), x_original_validation]
 
 	# initial values
-	initialGuess = np.ones(x_original_train.shape[1]) # MELHORAR: quais valores de theta comecar?
-	learningRate = 0.01 # MELHORAR: qual valor?
+	initialGuess = np.ones((len(labels), x_original_train.shape[1])) # MELHORAR: quais valores de theta comecar?
+	learningRate = 0.00001 # MELHORAR: qual valor?
 	iterations = 1000 # MELHORAR: quantas iterações?
 
-	coefficients = np.array([])
-	for label in labels:
-		start_time = time.time()
+	start_time = time.time()
 
-		mlr = MultinomialLogisticRegression()
+	print("Creating one hot encoding for target...")
+	y_hot_encoding = np.array([])
+	for index in y_original_train:
+		y_line = np.zeros(len(labels))
+		y_line[index] = 1
+		y_hot_encoding = np.append(y_hot_encoding, y_line)
+	y_hot_encoding = y_hot_encoding.reshape(len(labels), x_original_train.shape[0])
+	
+	mlr = MultinomialLogisticRegression()
+	cost_iterations = mlr.fit(x_original_train, y_hot_encoding, "Multinomial", initialGuess, learningRate, iterations, cross_entropy)
 
-		y_train = toggle_class(y_original_train, label)
+	plt.plot([x for x in range(iterations)], cost_iterations, color="blue")
+	plt.title("Multinomial Logistic Regression with learningRate = {}".format(learningRate))
+	plt.savefig("CostGraphMultinomial")
+	plt.xlabel("Number of iterations")
+	plt.ylabel("Cost")
+	plt.clf()
 
-		mlr.fit(x_original_train, y_train, labels[label], initialGuess, learningRate, iterations)
-
-		y_validation = toggle_class(y_original_validation, label)
-
-		coefficients = np.append(coefficients, mlr.coefficients)
-
-		elapsed_time = time.time() - start_time
-		print("Elapsed time: %1f s" %(elapsed_time))
-
-	scores = score(coefficients, x_original_validation)
-
-	predictions = softmax(scores)
+	elapsed_time = time.time() - start_time
+	print("Elapsed time: %1f s" %(elapsed_time))

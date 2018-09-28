@@ -4,20 +4,20 @@ from GradientDescent import descent
 
 class MultinomialLogisticRegression:
 	coefficients = None
-
+	
 	@staticmethod
-	def linear(coefficients, xs):
-		return np.sum(coefficients * xs, axis=1)
+	def softmax(coefficients, xs):
+		score = np.dot(coefficients, xs.T)
+		return np.exp(score) / (np.sum(np.exp(score)))
 
-	model = linear
+	model = softmax
 
 	"""
 		Find coefficients
 	"""
-	def fit(self, x, y, label, initialGuess, learningRate, iterations):
-		print("Performing fit for label {}...".format(label))
+	def fit(self, x, y, label, initialGuess, learningRate, iterations, costFunction):
+		print("Performing fit for {}...".format(label))
 
-		self.coefficients = descent(initialGuess, self.model, x, y, learningRate, iterations)
+		self.coefficients, cost_iterations = descent(initialGuess, self.softmax, x, y, learningRate, iterations, costFunction)
 
-	def score(self, x):
-		return np.sum(self.coefficients * x)
+		return cost_iterations

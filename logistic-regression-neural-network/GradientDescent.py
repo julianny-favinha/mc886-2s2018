@@ -1,7 +1,5 @@
 import numpy as np
 
-from Cost import cost
-
 def derivative(h, ys, xs, learningRate):
 	totalSum = np.dot(h - ys, xs)
 
@@ -11,14 +9,14 @@ def derivative(h, ys, xs, learningRate):
 
 	return learningRate * (1 / xs.shape[0]) * totalSum
 
-def descent(initialGuess, model, x, y, learningRate, iterations):
+def descent(initialGuess, model, x, y, learningRate, iterations, costFunction):
 	thetas = initialGuess
 
 	cost_iterations = []
-	for _ in range(iterations):
+	for it in range(iterations):
 		h = model(thetas, x)
 		thetas = thetas - derivative(h, y, x, learningRate)
 
-		cost_iterations.append(cost(thetas, x, y))
+		cost_iterations.append(costFunction(thetas, x, y))
 
 	return thetas, cost_iterations

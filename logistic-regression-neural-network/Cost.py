@@ -1,9 +1,14 @@
 import numpy as np
 
-def hyp(coefficients, xs):
-	return 1 / (1 + np.exp(-np.dot(coefficients, xs.T)))
+from LogisticRegression import LogisticRegression
+from MultinomialLogisticRegression import MultinomialLogisticRegression
 
-def cost(thetas, xs, ys):	
-	sum = np.sum(ys*np.log(hyp(thetas, xs) + 0.00000001) + (1 - ys)*np.log(1 - hyp(thetas, xs) + 0.00000001))
+def lr_cost(thetas, xs, ys):	
+	sum = np.sum(ys*np.log(LogisticRegression.sigmoid(thetas, xs) + 0.00000001) + (1 - ys)*np.log(1 - LogisticRegression.sigmoid(thetas, xs) + 0.00000001))
 	
 	return -(1/len(xs)) * sum
+
+def cross_entropy(thetas, xs, ys):
+	predicted = MultinomialLogisticRegression.softmax(thetas, xs)
+	sum = np.sum(predicted * np.log(ys + 0.00000001))
+	return -(1/len(ys)) * sum

@@ -50,6 +50,8 @@ if __name__ == "__main__":
 	learningRate = 0.01
 	iterations = 1000
 
+	print("Using learning rate = {} and {} iterations".format(learningRate, iterations))
+
 	predictions = np.array([])
 	cost_iterations = []
 	for label in labels:

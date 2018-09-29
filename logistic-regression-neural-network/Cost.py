@@ -11,4 +11,4 @@ def lr_cost(thetas, xs, ys):
 def cross_entropy(thetas, xs, ys):
 	predicted = MultinomialLogisticRegression.softmax(thetas, xs)
 	sum = np.sum(predicted * np.log(ys + 0.00000001))
-	return -(1/len(ys)) * sum
+	return -(1/ys.shape[1]) * sum

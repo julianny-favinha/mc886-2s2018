@@ -28,7 +28,7 @@ def count(predicted, y):
 
 	return true_positive, false_positive, true_negative, false_negative
 
-def conffusion_matrix(label, predicted, y):
+def confusion_matrix(label, predicted, y):
 		true_positive, false_positive, true_negative, false_negative = count(predicted, y)
 		return pd.DataFrame([[true_positive, false_negative], [false_positive, true_negative]], index=["Real " + label, "Real not " + label], columns=["Predicted " + label, "Predicted not " + label])
 

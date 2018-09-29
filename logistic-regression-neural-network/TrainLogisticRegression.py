@@ -5,7 +5,7 @@ import mnist_reader
 import time
 
 from LogisticRegression import LogisticRegression
-from ErrorMetrics import conffusion_matrix, normalized_accuracy
+from ErrorMetrics import confusion_matrix, normalized_accuracy
 from Cost import lr_cost
 
 labels = {0: "T-shirt/top", 
@@ -78,7 +78,7 @@ if __name__ == "__main__":
 		predictions = np.append(predictions, predicted)
 
 		# error metrics
-		print(conffusion_matrix(labels[label], predicted, y_validation))
+		print(confusion_matrix(labels[label], predicted, y_validation))
 		print("Normalized accuracy: {0:.1f}%".format(normalized_accuracy(predicted, y_validation)*100))
 
 		elapsed_time = time.time() - start_time

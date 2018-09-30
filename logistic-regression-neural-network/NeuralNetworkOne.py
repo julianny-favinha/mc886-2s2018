@@ -35,10 +35,10 @@ class NeuralNetwork(object):
 	# 	new_z[new_z <= 0] = 0
 	# 	return new_z
 
-	def lossFunction(self, h, y):
-		print("h", h)
-		sum = np.sum(y*np.log(h + 0.00000001) + (1 - y)*np.log(1 - h + 0.00000001))
-		return -(1/y.shape[0]) * sum
+	# def lossFunction(self, h, y):
+	# 	print("h", h)
+	# 	sum = np.sum(y*np.log(h + 0.00000001) + (1 - y)*np.log(1 - h + 0.00000001))
+	# 	return -(1/y.shape[0]) * sum
 
 	def J(self, h, y):
 		return np.sum(0.5 * (y - h)**2)

@@ -42,12 +42,13 @@ if __name__ == "__main__":
 		print("output_layer", output_layer)
 
 		output_layer_softmax = softmax(NN.z3)
-		print("softmax", output_layer_softmax)
+		print("softmax[0]", output_layer_softmax[0])
+		print("y_hot_encoding[0]", y_hot_encoding[0])
 
-		loss = NN.lossFunction(output_layer_softmax, y_hot_encoding)
+		loss = NN.J(output_layer_softmax, y_hot_encoding)
 		print("loss", loss)
 
-		dJdW1, dJdW2 = NN.JPrime(x_layer_train, y_hot_encoding) 
+		dJdW1, dJdW2 = NN.JPrime(x_layer_train, y_hot_encoding)
 
 		learningRate = 1
 

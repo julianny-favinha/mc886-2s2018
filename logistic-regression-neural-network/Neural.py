@@ -1,8 +1,8 @@
 import numpy as np 
 
-def sigmoid(coefficients, xs):
-	print("dot",np.dot(coefficients, xs.T))
-	return 1 / (1 + np.exp(-np.dot(coefficients, xs.T)))
+def reLU(coefficients, x):
+	xs = np.dot(coefficients, x.T)
+	return np.maximum(np.zeros(xs.shape), xs)
 
 def loss_function(layer3, y):
 	k = layer3.shape[0]
@@ -15,12 +15,12 @@ def loss_function(layer3, y):
 
 def feed_forward(layer1, weights):
 	# first hidden layer
-	layer2 = sigmoid(weights[0], layer1)
+	layer2 = reLU(weights[0], layer1)
 	print("layer2.shape", layer2.shape)
 	print(layer2)
 
 	# output
-	layer3 = sigmoid(weights[1], layer2)
+	layer3 = reLU(weights[1], layer2)
 	print("layer3", layer3)
 
 	return layer3
@@ -37,7 +37,7 @@ if __name__ == "__main__":
 	# mesmo shape de layer3
 	y = np.array([[1]])
 
-	layer3 = feed_forward(entrada[0], weights)
+	layer3 = feed_forward(entrada, weights)
 
 	loss = loss_function(layer3, y[0])
 

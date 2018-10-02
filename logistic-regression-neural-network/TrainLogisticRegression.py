@@ -32,7 +32,7 @@ def toggle_class(x, label):
 	return y
 
 if __name__ == "__main__":
-	# get the training data
+	# get training data
 	x_original_train, y_original_train = mnist_reader.load_mnist('fashion-mnist/data/fashion', kind='train')
 	x_original_validation, y_original_validation = x_original_train[-10000:], y_original_train[-10000:]
 	x_original_train, y_original_train = x_original_train[:-10000], y_original_train[:-10000]
@@ -64,6 +64,7 @@ if __name__ == "__main__":
 		# train
 		cost_iterations = lr.fit(x_original_train, y_train, labels[label], initialGuess, learningRate, iterations, lr_cost)
 
+		# plot cost by number of iteration graph
 		plt.plot([x for x in range(iterations)], cost_iterations, color="blue")
 		plt.title("Logistic Regression for label {} with learningRate = {}".format(labels[label], learningRate))
 		plt.savefig("CostGraph" + labels[label].replace("/", "-"))

@@ -4,7 +4,8 @@ import mnist_reader
 import time
 
 from MultinomialLogisticRegression import MultinomialLogisticRegression
-from Cost import cross_entropy
+
+from sklearn.metrics import confusion_matrix, accuracy_score
 
 labels = {0: "T-shirt/top", 
  			1: "Trouser", 
@@ -16,6 +17,11 @@ labels = {0: "T-shirt/top",
  			7: "Sneaker", 
  			8: "Bag",
  			9: "Ankle boot"}
+
+def cross_entropy(thetas, xs, ys):
+	predicted = MultinomialLogisticRegression.softmax(thetas, xs)
+	sum = np.sum(predicted * np.log(ys.T + 0.00000001))
+	return -(1/ys.shape[1]) * sum
 
 if __name__ == "__main__":
 	# get the training data
@@ -34,8 +40,7 @@ if __name__ == "__main__":
 	# initial values
 	initialGuess = np.ones((len(labels), x_original_train.shape[1])) # MELHORAR: quais valores de theta comecar?
 	learningRate = 0.0001 # MELHORAR: qual valor?
-	iterations = 10 # MELHORAR: quantas iterações?
-
+	iterations = 1000 # MELHORAR: quantas iterações?
 	print("Using learning rate = {} and {} iterations".format(learningRate, iterations))
 
 	start_time = time.time()
@@ -48,6 +53,7 @@ if __name__ == "__main__":
 		y_hot_encoding.append(y_line)
 	y_hot_encoding = np.array(y_hot_encoding)
 	
+	# train
 	mlr = MultinomialLogisticRegression()
 	cost_iterations = mlr.fit(x_original_train, y_hot_encoding.T, "Multinomial", initialGuess, learningRate, iterations, cross_entropy)
 
@@ -58,8 +64,33 @@ if __name__ == "__main__":
 	plt.ylabel("Cost")
 	plt.clf()
 
-	predictions = mlr.predict(x_original_validation, "Multinomial")
-	print((np.sum(predictions, axis=0)).shape)
+	# predict
+	predictions = (mlr.predict(x_original_validation, "Multinomial"))
+	# print(predictions[0])
+
+	# find predicted class
+	predicted_class = []
+	for pred in predictions:
+		ind = np.argmax(pred)
+		predicted_class.append(ind)
+
+	cm_labels = list(labels.keys())
+	cm = confusion_matrix(y_original_validation.tolist(), predicted_class)
+	print("Confusion matrix")
+	print(cm)
+	fig = plt.figure()
+	ax = fig.add_subplot(111)
+	cax = ax.matshow(cm)
+	plt.title('Confusion matrix')
+	fig.colorbar(cax)
+	ax.set_xticklabels([''] + cm_labels)
+	ax.set_yticklabels([''] + cm_labels)
+	plt.xlabel('Predicted')
+	plt.ylabel('True')
+	plt.savefig("ConfusionMatrixMultinomial", bbox_inches="tight")
+	plt.clf()
+
+	print("Accuracy score = {0:.1f}%".format((accuracy_score(y_original_validation.tolist(), predicted_class) * 100)))
 
 	elapsed_time = time.time() - start_time
 	print("Elapsed time: %1f s" %(elapsed_time))

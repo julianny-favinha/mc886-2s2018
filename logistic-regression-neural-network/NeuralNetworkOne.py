@@ -17,20 +17,20 @@ class NeuralNetwork(object):
 		# print("z2[0]", self.z2[0])
 		self.a2 = self.sigmoid(self.z2)
 		# print("a2[0]", self.a2[0])
-		self.z3 = np.dot(self.a2, self.weights2) + self.bias2
+		self.z3 = np.dot(self.a2, self.weights2) #+ self.bias2
 		# print("z3[0]", self.z3[0])
 		self.a3 = self.softmax(self.z3)
 		# print("a3[0]", self.a3[0])
 		return self.a3
 
-	def sigmoidPrime(self, z):
-		# print("sigmoidPrime")
+	def sigmoidDerivative(self, z):
+		# print("sigmoidDerivative")
 		# print(np.exp(-z)/((1+np.exp(-z))**2))
 		return self.sigmoid(z) * (1 - self.sigmoid(z))
 		# return np.exp(-z)/(((1+np.exp(-z))**2))
 
 	def sigmoid(self, z):
-		z = np.clip( z, -1, 1 )
+		# z = np.clip(z, 0.00001, 1)
 		z = 1.0 / (1.0 + np.exp(-z))
 		return z
 
@@ -41,32 +41,33 @@ class NeuralNetwork(object):
 	def softmax(self, z):
 		assert len(z.shape) == 2
 		s = np.max(z, axis=1)
-		s = s[:, np.newaxis] # necessary step to do broadcasting
+		s = s[:, np.newaxis]
 		e_x = np.exp(z - s)
 		div = np.sum(e_x, axis=1)
-		div = div[:, np.newaxis] # dito
+		div = div[:, np.newaxis]
 		return e_x / div
 
 	# def reLU(self, z):
 	# 	return np.maximum(np.zeros(z.shape), z)
 
-	# def reLUPrime(self, z):
+	# def reLUDerivative(self, z):
 	# 	new_z = np.copy(z)
 	# 	new_z[new_z > 0] = 1
 	# 	new_z[new_z <= 0] = 0
 	# 	return new_z
 
-	def J(self, h, y):
-		return np.mean(np.sum((y - h)**2, axis=1))
+	def CrossEntropy(self, h, y):
+		return (-1 / len(y)) * (np.sum(np.multiply(y, np.log(h + 0.00000001))))
+		#return np.mean(np.sum((y - h)**2, axis=1))
 
-	def JPrime(self, X, y):
+	def CrossEntropyDerivative(self, X, y):
 		delta3 = self.a3 - y
 		a2delta3 = np.dot(self.a2.T, delta3)
 
-		delta2 = np.multiply(np.dot(delta3, self.weights2.T), self.sigmoidPrime(self.z2))
+		delta2 = np.multiply(np.dot(delta3, self.weights2.T), self.sigmoidDerivative(self.z2))
 		a1delta2 = np.dot(X.T, delta2)
 
-		deltabias2 = self.sigmoidPrime(self.z3)
+		#deltabias2 = self.sigmoidDerivative(self.z3)
 		# print("deltabias2.shape", deltabias2.shape)
 
-		return deltabias2, a1delta2, a2delta3
+		return a1delta2, a2delta3

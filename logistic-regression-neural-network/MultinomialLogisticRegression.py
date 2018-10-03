@@ -3,11 +3,11 @@ import numpy as np
 from GradientDescent import descent
 
 class MultinomialLogisticRegression:
-	coefficients = None
+	coeficients = None
 	
 	@staticmethod
-	def softmax(coefficients, xs):
-		score = np.dot(coefficients, xs.T)
+	def softmax(coeficients, xs):
+		score = np.dot(xs, coeficients.T)
 		exponent = np.exp(score)
 		return exponent / (np.sum(exponent))
 
@@ -19,10 +19,10 @@ class MultinomialLogisticRegression:
 	def fit(self, x, y, label, initialGuess, learningRate, iterations, costFunction):
 		print("Performing fit for {}...".format(label))
 
-		self.coefficients, cost_iterations = descent(initialGuess, self.softmax, x, y, learningRate, iterations, costFunction)
+		self.coeficients, cost_iterations = descent(initialGuess, self.softmax, x, y, learningRate, iterations, costFunction)
 		return cost_iterations
 
 	def predict(self, x, label):
 		print("Performing predictions for {}...".format(label))
 
-		return self.softmax(self.coefficients, x)
+		return self.softmax(self.coeficients, x)

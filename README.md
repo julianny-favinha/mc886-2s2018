@@ -18,7 +18,7 @@ https://www.kaggle.com/shivam2503/diamonds
 
 
 
-*Logistic Regression*
+*Logistic Regression and Neural Networks*
 
 Using Fashion-MNIST dataset:
 

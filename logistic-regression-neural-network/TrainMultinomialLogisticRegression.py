@@ -56,12 +56,15 @@ if __name__ == "__main__":
 	# train
 	mlr = MultinomialLogisticRegression()
 	cost_iterations = mlr.fit(x_original_train, y_hot_encoding.T, "Multinomial", initialGuess, learningRate, iterations, cross_entropy)
+	# print("coef shape", mlr.coeficients.shape)
+	# print(mlr.coeficients)
 
 	plt.plot([x for x in range(iterations)], cost_iterations, color="blue")
 	plt.title("Multinomial Logistic Regression with learningRate = {}".format(learningRate))
-	plt.savefig("CostGraphMultinomial")
 	plt.xlabel("Number of iterations")
 	plt.ylabel("Cost")
+	plt.tight_layout()
+	plt.savefig("CostGraphMultinomial")
 	plt.clf()
 
 	# predict

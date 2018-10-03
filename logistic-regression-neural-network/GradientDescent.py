@@ -1,7 +1,7 @@
 import numpy as np
 
 def derivative(h, ys, xs, learningRate):
-	totalSum = np.dot(h - ys, xs)
+	totalSum = np.dot(h.T - ys, xs)
 
 	isNanOrIsInf = np.any(np.logical_or(np.isnan(totalSum), np.isinf(totalSum)))
 	if isNanOrIsInf:

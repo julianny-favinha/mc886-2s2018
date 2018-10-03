@@ -5,8 +5,10 @@ import mnist_reader
 import time
 
 from LogisticRegression import LogisticRegression
-from ErrorMetrics import confusion_matrix, normalized_accuracy
+# from ErrorMetrics import confusion_matrix, normalized_accuracy
 from Cost import lr_cost
+
+from sklearn.metrics import confusion_matrix, accuracy_score
 
 labels = {0: "T-shirt/top", 
  			1: "Trouser", 
@@ -78,9 +80,33 @@ if __name__ == "__main__":
 		predicted = lr.predict(x_original_validation, labels[label])
 		predictions = np.append(predictions, predicted)
 
+		toggle_predicted = []
+		for p in predicted:
+			if p >= 0.5:
+				toggle_predicted.append(1)
+			else:
+				toggle_predicted.append(0)
+
 		# error metrics
-		print(confusion_matrix(labels[label], predicted, y_validation))
-		print("Normalized accuracy: {0:.1f}%".format(normalized_accuracy(predicted, y_validation)*100))
+		# print(confusion_matrix(labels[label], predicted, y_validation))
+		# print("Normalized accuracy: {0:.1f}%".format(normalized_accuracy(predicted, y_validation)*100))
+
+		cm_labels = ["Not " + labels[label], labels[label]]
+		cm = confusion_matrix(y_validation.tolist(), toggle_predicted)
+		print(cm)
+		fig = plt.figure()
+		ax = fig.add_subplot(111)
+		cax = ax.matshow(cm)
+		plt.title('Confusion matrix')
+		fig.colorbar(cax)
+		ax.set_xticklabels([''] + cm_labels)
+		ax.set_yticklabels([''] + cm_labels)
+		plt.xlabel('Predicted')
+		plt.ylabel('True')
+		plt.savefig("ConfusionMatrix" + labels[label].replace("/", "-"), bbox_inches="tight")
+		plt.clf()
+
+		print("Accuracy score = {0:.1f}%".format(accuracy_score(y_validation.tolist(), toggle_predicted)))
 
 		elapsed_time = time.time() - start_time
 		print("Elapsed time: %1f s" %(elapsed_time))

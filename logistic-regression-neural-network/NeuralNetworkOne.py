@@ -3,7 +3,7 @@ import numpy as np
 class NeuralNetwork(object):
 	def __init__(self):
 		self.inputLayerSize = 785
-		self.hiddenLayerSize = 30
+		self.hiddenLayerSize = 256
 		self.outputLayerSize = 10
 
 		self.weights1 = np.random.rand(self.inputLayerSize, self.hiddenLayerSize)
@@ -34,9 +34,18 @@ class NeuralNetwork(object):
 		z = 1.0 / (1.0 + np.exp(-z))
 		return z
 
+	# def softmax(self, z):
+	# 	exponent = np.exp(z - np.max(z))
+	# 	return exponent / np.sum(exponent, axis=0)
+
 	def softmax(self, z):
-		exponent = np.exp(z - np.max(z))
-		return exponent / np.sum(exponent, axis=0)
+		assert len(z.shape) == 2
+		s = np.max(z, axis=1)
+		s = s[:, np.newaxis] # necessary step to do broadcasting
+		e_x = np.exp(z - s)
+		div = np.sum(e_x, axis=1)
+		div = div[:, np.newaxis] # dito
+		return e_x / div
 
 	# def reLU(self, z):
 	# 	return np.maximum(np.zeros(z.shape), z)
@@ -46,23 +55,6 @@ class NeuralNetwork(object):
 	# 	new_z[new_z > 0] = 1
 	# 	new_z[new_z <= 0] = 0
 	# 	return new_z
-
-	# def lossFunction(self, h, y):
-	# 	print("lossFunction h.shape", h.shape)
-	# 	print("lossFunction y.shape", y.shape)
-	# 	sum = np.sum(y*np.log(h + 0.00000001) + (1 - y)*np.log(1 - h + 0.00000001))
-	# 	return -(1/y.shape[0]) * sum
-
-	# # ARRUMAR: QUAL A DERIVADA?
-	# def lossFunctionPrime(self, X, y):
-	# 	print("y shape", y.shape)
-	# 	delta3 = self.outputLayer - y
-	# 	print("delta3.shape", delta3.shape)
-
-	# 	delta2 = np.dot(self.a2 * (1 - self.a2), self.weights2)
-	# 	print("delta2.shape", delta2.shape)
-
-	# 	return delta2, delta3
 
 	def J(self, h, y):
 		return np.mean(np.sum((y - h)**2, axis=1))

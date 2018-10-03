@@ -8,7 +8,7 @@ class NeuralNetwork(object):
 
 		self.weights1 = np.random.rand(self.inputLayerSize, self.hiddenLayerSize)
 		self.weights2 = np.random.rand(self.hiddenLayerSize, self.outputLayerSize)
-		self.bias2 = np.ones((10, self.outputLayerSize))
+		self.bias2 = np.ones((500, self.outputLayerSize))
 
 	def forward(self, X):
 		# print("X[0]", X[0])
@@ -19,7 +19,7 @@ class NeuralNetwork(object):
 		# print("a2[0]", self.a2[0])
 		self.z3 = np.dot(self.a2, self.weights2) + self.bias2
 		# print("z3[0]", self.z3[0])
-		self.a3 = self.z3
+		self.a3 = self.softmax(self.z3)
 		# print("a3[0]", self.a3[0])
 		return self.a3
 

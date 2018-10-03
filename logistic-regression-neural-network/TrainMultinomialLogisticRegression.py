@@ -38,9 +38,9 @@ if __name__ == "__main__":
 	x_original_validation = np.c_[np.ones(x_original_validation.shape[0]), x_original_validation]
 
 	# initial values
-	initialGuess = np.ones((len(labels), x_original_train.shape[1])) # MELHORAR: quais valores de theta comecar?
-	learningRate = 0.0001 # MELHORAR: qual valor?
-	iterations = 1000 # MELHORAR: quantas iterações?
+	initialGuess = np.ones((len(labels), x_original_train.shape[1]))
+	learningRate = 0.0001
+	iterations = 1000
 	print("Using learning rate = {} and {} iterations".format(learningRate, iterations))
 
 	start_time = time.time()

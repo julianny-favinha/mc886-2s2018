@@ -5,8 +5,6 @@ import mnist_reader
 import time
 
 from LogisticRegression import LogisticRegression
-# from ErrorMetrics import confusion_matrix, normalized_accuracy
-from Cost import lr_cost
 
 from sklearn.metrics import confusion_matrix, accuracy_score
 
@@ -21,11 +19,16 @@ labels = {0: "T-shirt/top",
  			8: "Bag",
  			9: "Ankle boot"}
 
+def lr_cost(thetas, xs, ys):	
+	sum = np.sum(ys*np.log(LogisticRegression.sigmoid(thetas, xs) + 0.00000001) + (1 - ys)*np.log(1 - LogisticRegression.sigmoid(thetas, xs) + 0.00000001))
+	
+	return -(1/len(xs)) * sum
+
 """
 	Suppose we want to predict if it is l label or not. Then
 	1) Change all labels == l to 1
 	2) Change all labels != l to 0
-	"""
+"""
 def toggle_class(x, label):
 	y = x.copy()
 	y[x == label] = 1
@@ -51,7 +54,6 @@ if __name__ == "__main__":
 	initialGuess = np.ones(x_original_train.shape[1])
 	learningRate = 0.01
 	iterations = 1000
-
 	print("Using learning rate = {} and {} iterations".format(learningRate, iterations))
 
 	predictions = np.array([])
@@ -61,9 +63,8 @@ if __name__ == "__main__":
 
 		lr = LogisticRegression()
 
-		y_train = toggle_class(y_original_train, label)
-
 		# train
+		y_train = toggle_class(y_original_train, label)
 		cost_iterations = lr.fit(x_original_train, y_train, labels[label], initialGuess, learningRate, iterations, lr_cost)
 
 		# plot cost by number of iteration graph
@@ -87,12 +88,9 @@ if __name__ == "__main__":
 			else:
 				toggle_predicted.append(0)
 
-		# error metrics
-		# print(confusion_matrix(labels[label], predicted, y_validation))
-		# print("Normalized accuracy: {0:.1f}%".format(normalized_accuracy(predicted, y_validation)*100))
-
 		cm_labels = ["Not " + labels[label], labels[label]]
 		cm = confusion_matrix(y_validation.tolist(), toggle_predicted)
+		print("Confusion matrix")
 		print(cm)
 		fig = plt.figure()
 		ax = fig.add_subplot(111)

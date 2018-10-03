@@ -106,7 +106,7 @@ if __name__ == "__main__":
 		plt.savefig("ConfusionMatrix" + labels[label].replace("/", "-"), bbox_inches="tight")
 		plt.clf()
 
-		print("Accuracy score = {0:.1f}%".format(accuracy_score(y_validation.tolist(), toggle_predicted)))
+		print("Accuracy score = {0:.1f}%".format((accuracy_score(y_validation.tolist(), toggle_predicted) * 100)))
 
 		elapsed_time = time.time() - start_time
 		print("Elapsed time: %1f s" %(elapsed_time))

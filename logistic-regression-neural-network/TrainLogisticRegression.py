@@ -70,9 +70,9 @@ if __name__ == "__main__":
 		# plot cost by number of iteration graph
 		plt.plot([x for x in range(iterations)], cost_iterations, color="blue")
 		plt.title("Logistic Regression for label {} with learningRate = {}".format(labels[label], learningRate))
-		plt.savefig("CostGraph" + labels[label].replace("/", "-"))
 		plt.xlabel("Number of iterations")
 		plt.ylabel("Cost")
+		plt.savefig("CostGraph" + labels[label].replace("/", "-"))
 		plt.clf()
 
 		y_validation = toggle_class(y_original_validation, label)

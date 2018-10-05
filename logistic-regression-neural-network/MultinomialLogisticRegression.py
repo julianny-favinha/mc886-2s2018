@@ -7,9 +7,15 @@ class MultinomialLogisticRegression:
 	
 	@staticmethod
 	def softmax(coeficients, xs):
-		score = np.dot(xs, coeficients.T)
-		exponent = np.exp(score)
-		return exponent / (np.sum(exponent))
+		z = np.dot(xs, coeficients.T)
+		
+		assert len(z.shape) == 2
+		s = np.max(z, axis=1)
+		s = s[:, np.newaxis]
+		e_x = np.exp(z - s)
+		div = np.sum(e_x, axis=1)
+		div = div[:, np.newaxis]
+		return e_x / div
 
 	model = softmax
 

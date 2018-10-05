@@ -31,14 +31,13 @@ def main():
 
     config = {
         "initialGuess": np.ones((len(labels), x_train.shape[1])),
-        "learningRate": 0.0001,
+        "learningRate": 0.01,
         "iterations": 1000
     }
     print(f'Using learning rate = {config["learningRate"]} and {config["iterations"]} iterations')
 
     start_time = time.time()
 
-    print("Creating one hot encoding for target...")
     y_hot_encoding = list()
     for index in y_train:
         y_line =  [0 for _ in range(len(labels))]

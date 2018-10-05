@@ -50,7 +50,7 @@ def main():
     mlr = MultinomialLogisticRegression(config)
     cost_iterations = mlr.fit(x_train, y_hot_encoding.T, "Multinomial", cross_entropy)
 
-    plot_cost(cost_iterations, "Multinomial", config["iterations"])
+    plot_cost(cost_iterations, "Multinomial", config["iterations"], config["learningRate"])
 
     # predict
     predictions = (mlr.predict(x_validation, "Multinomial"))

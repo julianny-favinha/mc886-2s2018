@@ -61,7 +61,7 @@ def main():
         predicted = lr.predict(x_validation, labels[label])
         predictions.append(predicted)
 
-        plot_cost(cost_iterations, labels[label], config["iterations"])
+        plot_cost(cost_iterations, labels[label], config["iterations"], config["learningRate"])
         binarized_predicted = [1 if p >= 0.5 else 0 for p in predicted]
         show_metrics(binarized_predicted, ["Not " + labels[label], labels[label]], y_binary_validation, "ConfusionMatrix" + labels[label].replace("/", "-"))
 

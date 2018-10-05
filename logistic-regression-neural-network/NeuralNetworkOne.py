@@ -8,7 +8,7 @@ class NeuralNetwork(object):
 
 		self.weights1 = np.random.rand(self.inputLayerSize, self.hiddenLayerSize)
 		self.weights2 = np.random.rand(self.hiddenLayerSize, self.outputLayerSize)
-		self.bias2 = np.ones((500, self.outputLayerSize))
+		#self.bias2 = np.ones((500, self.outputLayerSize))
 
 	def forward(self, X):
 		# print("X[0]", X[0])
@@ -24,13 +24,11 @@ class NeuralNetwork(object):
 		return self.a3
 
 	def sigmoidDerivative(self, z):
-		# print("sigmoidDerivative")
-		# print(np.exp(-z)/((1+np.exp(-z))**2))
-		return self.sigmoid(z) * (1 - self.sigmoid(z))
-		# return np.exp(-z)/(((1+np.exp(-z))**2))
+		# return self.sigmoid(z) * (1 - self.sigmoid(z))
+		return np.exp(-z)/(((1+np.exp(-z))**2))
 
 	def sigmoid(self, z):
-		# z = np.clip(z, 0.00001, 1)
+		z = np.clip(z, 0.00001, 1)
 		z = 1.0 / (1.0 + np.exp(-z))
 		return z
 
@@ -62,10 +60,10 @@ class NeuralNetwork(object):
 
 	def CrossEntropyDerivative(self, X, y):
 		delta3 = self.a3 - y
-		a2delta3 = np.dot(self.a2.T, delta3)
+		a2delta3 = 1/X.shape[0] * np.dot(self.a2.T, delta3)
 
 		delta2 = np.multiply(np.dot(delta3, self.weights2.T), self.sigmoidDerivative(self.z2))
-		a1delta2 = np.dot(X.T, delta2)
+		a1delta2 = 1/X.shape[0] * np.dot(X.T, delta2)
 
 		#deltabias2 = self.sigmoidDerivative(self.z3)
 		# print("deltabias2.shape", deltabias2.shape)

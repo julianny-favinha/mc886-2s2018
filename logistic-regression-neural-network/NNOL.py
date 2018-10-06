@@ -15,7 +15,6 @@ class NNOL(object):
         self.a2 = None
         self.z3 = None
         self.a3 = None
-        self.j = None
 
 
     def forward(self, x):
@@ -39,14 +38,14 @@ class NNOL(object):
 
     def iteration(self, x, y):
         self.a3 = self.forward(x)
-        self.cost(x, y)
-        self.cost_prime(x, y)
-        self.gradient_descent()
-        return self.j
+        # self.cost(x, y)
+        # self.cost_prime(x, y)
+        # self.gradient_descent()
+        # return self.j
 
 
     def cost(self, x, y):
-        self.j = (np.sum((y - self.a3) ** 2)) / x.shape[0] #/x.shape[0] + (self.rglzn_lambda/2)*((np.sum(self.weights1**2))+(np.sum(self.weights2**2)))
+        return (np.sum((y - self.a3) ** 2)) / x.shape[0] #/x.shape[0] + (self.rglzn_lambda/2)*((np.sum(self.weights1**2))+(np.sum(self.weights2**2)))
 
 
     def cost_prime(self, x, y):
@@ -61,11 +60,13 @@ class NNOL(object):
 
         # print("cost_prime")
         delta3 = np.multiply(-(y - self.a3), self.sigmoid_prime(self.z3))
-        self.djdw2 = np.dot(self.a2.T, delta3)# /x.shape[0] + self.rglzn_lambda*self.weights2
+        djdw2 = np.dot(self.a2.T, delta3)# /x.shape[0] + self.rglzn_lambda*self.weights2
         delta2 = np.dot(delta3, self.weights2.T) * self.sigmoid_prime(self.z2)
-        self.djdw1 = np.dot(x.T, delta2)#/x.shape[0] + self.rglzn_lambda*self.weights1
+        djdw1 = np.dot(x.T, delta2)#/x.shape[0] + self.rglzn_lambda*self.weights1
+
+        return djdw1, djdw2
 
 
-    def gradient_descent(self):
-        self.weights1 -= self.learning_rate * self.djdw1
-        self.weights2 -= self.learning_rate * self.djdw2
+    def gradient_descent(self, delta1, delta2):
+        self.weights1 -= self.learning_rate * delta1
+        self.weights2 -= self.learning_rate * delta2

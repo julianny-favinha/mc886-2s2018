@@ -4,6 +4,7 @@ import mnist_reader
 
 from NNOL import NNOL
 from ParseData import prepare_data, segregate_data
+from ErrorMetrics import show_metrics
 
 
 labels = {0: "T-shirt/top", 
@@ -48,11 +49,11 @@ def main():
     x_train, y_train, x_validation, y_validation = segregate_data(x_train, y_train)
 
 
-    images = 2000
-    x_train = x_train[0:images]
-    y_train = y_train[0:images]
-    x_validation = x_validation[0:images]
-    y_validation = y_validation[0:images]
+    # images = 2000
+    # x_train = x_train[0:images]
+    # y_train = y_train[0:images]
+    # x_validation = x_validation[0:images]
+    # y_validation = y_validation[0:images]
 
     #precisa estar na forma correta: 1,784
     # x_train = np.array([x_train])
@@ -65,22 +66,36 @@ def main():
     start_time = time.time()
     network = NNOL(learning_rate=0.001, inputLayerSize=785, hiddenLayerSize=256, outputLayerSize=10)
 
-    epochs = 200
+    epochs = 3
+    batch_size = 100
+
     for epoch in range(epochs):
-        # print("Forwarding for epoch", epoch)
-        network.iteration(x_train, y_hot_encoding_train)
-        cost = network.j
-        # print(cost)
+        delta_acum1 = 0
+        delta_acum2 = 0
+
+        for batch in range(0, x_train.shape[0], batch_size):
+            # print("Forwarding for epoch", epoch)
+            network.forward(x_train[batch: batch + batch_size])
+
+            delta1, delta2 = network.cost_prime(x_train[batch: batch + batch_size], y_hot_encoding_train[batch: batch + batch_size])
+            delta_acum1 += delta1
+            delta_acum2 += delta2
+
+            cost = network.cost(x_train[batch: batch + batch_size], y_hot_encoding_train[batch: batch + batch_size])
+            print("Cost", cost)
+
+        network.gradient_descent(delta_acum1 / (x_train.shape[0] / batch_size), delta_acum2 / (x_train.shape[0] / batch_size))
 
     network.forward(x_validation)
-    print("learning rate {} - epochs {} - images {}".format(network.learning_rate, epochs, images))
-    testes = 10
+
     pred = []
-    for i in network.a3[0:testes]:
+    for i in network.a3:
         pred.append(np.argmax(i))
-    print("pred", np.array(pred))
+    print("pred", pred[0:10])
     y_hot_encoding_validation = one_hot_encode(y_validation, len(labels))
-    print("real",y_validation[0:testes])
+    print("real", y_validation[0:10])
+
+    show_metrics(pred, list(labels.keys()), y_validation.tolist(), "ConfusionMatrixOneLayer")
 
     elapsed_time = time.time() - start_time
     print("Elapsed time: %1f s" % elapsed_time)

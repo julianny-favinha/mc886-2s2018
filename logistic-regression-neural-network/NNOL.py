@@ -9,8 +9,8 @@ class NNOL(object):
         # self.rglzn_lambda = 1
         self.learning_rate = learning_rate
         """Inicializa parametros"""
-        self.weights1 = np.random.rand(self.inputLayerSize, self.hiddenLayerSize)
-        self.weights2 = np.random.rand(self.hiddenLayerSize, self.outputLayerSize)
+        self.weights1 = np.random.randn(self.inputLayerSize, self.hiddenLayerSize)
+        self.weights2 = np.random.randn(self.hiddenLayerSize, self.outputLayerSize)
         self.z2 = None
         self.a2 = None
         self.z3 = None
@@ -21,16 +21,14 @@ class NNOL(object):
     def forward(self, x):
         self.z2 = np.dot(x, self.weights1)
         self.a2 = self.sigmoid(self.z2)
-        print("passou a2")
         self.z3 = np.dot(self.a2, self.weights2)
         self.a3 = self.sigmoid(self.z3)
-        print("passou a3")
         return self.a3
 
 
     @staticmethod
     def sigmoid_prime(z):
-        sig =  1.0 / (1.0 + np.exp(-z))
+        sig = 1.0 / (1.0 + np.exp(-z))
         return sig * (1 - sig)
 
 
@@ -52,17 +50,20 @@ class NNOL(object):
 
 
     def cost_prime(self, x, y):
-        delta2 = y - self.a3
-        self.djdw2 = np.dot(self.a2.T, delta2)
+        # delta2 = y - self.a3
+        # self.djdw2 = np.dot(self.a2.T, delta2)
+        #
+        # delta1 = np.dot(delta2, self.weights2.T) * self.sigmoid_prime(self.a2)
+        # self.djdw1 = np.dot(x.T, delta1)
 
-        delta1 = np.dot(delta2, self.weights2.T) * self.sigmoid_prime(self.a2)
-        self.djdw1 = np.dot(x.T, delta1)
+        # print(self.djdw1)
+        # print(self.djdw2)
 
         # print("cost_prime")
-        # delta3 = np.multiply(-(y - self.a3), self.sigmoid_prime(self.z3))
-        # self.djdw2 = np.dot(self.a2.T, delta3)# /x.shape[0] + self.rglzn_lambda*self.weights2
-        # delta2 = np.dot(delta3, self.weights2.T) * self.sigmoid_prime(self.z2)
-        # self.djdw1 = np.dot(x.T, delta2)#/x.shape[0] + self.rglzn_lambda*self.weights1
+        delta3 = np.multiply(-(y - self.a3), self.sigmoid_prime(self.z3))
+        self.djdw2 = np.dot(self.a2.T, delta3)# /x.shape[0] + self.rglzn_lambda*self.weights2
+        delta2 = np.dot(delta3, self.weights2.T) * self.sigmoid_prime(self.z2)
+        self.djdw1 = np.dot(x.T, delta2)#/x.shape[0] + self.rglzn_lambda*self.weights1
 
 
     def gradient_descent(self):

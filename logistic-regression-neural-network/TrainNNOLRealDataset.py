@@ -47,10 +47,12 @@ def main():
     x_train = prepare_data(x_train)
     x_train, y_train, x_validation, y_validation = segregate_data(x_train, y_train)
 
-    # x_train = x_train[0:10]
-    # y_train = y_train[0:10]
-    # x_validation = x_validation[0:10]
-    # y_validation = y_validation[0:10]
+
+    images = 2000
+    x_train = x_train[0:images]
+    y_train = y_train[0:images]
+    x_validation = x_validation[0:images]
+    y_validation = y_validation[0:images]
 
     #precisa estar na forma correta: 1,784
     # x_train = np.array([x_train])
@@ -61,21 +63,24 @@ def main():
     y_hot_encoding_train = one_hot_encode(y_train, len(labels))
 
     start_time = time.time()
-    network = NNOL(learning_rate=0.0000001, inputLayerSize=785, hiddenLayerSize=256, outputLayerSize=10)
+    network = NNOL(learning_rate=0.001, inputLayerSize=785, hiddenLayerSize=256, outputLayerSize=10)
 
-    epochs = 5
+    epochs = 200
     for epoch in range(epochs):
-        print("Forwarding for epoch", epoch)
+        # print("Forwarding for epoch", epoch)
         network.iteration(x_train, y_hot_encoding_train)
         cost = network.j
-        print(cost)
+        # print(cost)
 
     network.forward(x_validation)
-    print("predicted")
-    print(network.a3[0:3])
-    print("real")
+    print("learning rate {} - epochs {} - images {}".format(network.learning_rate, epochs, images))
+    testes = 10
+    pred = []
+    for i in network.a3[0:testes]:
+        pred.append(np.argmax(i))
+    print("pred", np.array(pred))
     y_hot_encoding_validation = one_hot_encode(y_validation, len(labels))
-    print(y_hot_encoding_validation[0:3])
+    print("real",y_validation[0:testes])
 
     elapsed_time = time.time() - start_time
     print("Elapsed time: %1f s" % elapsed_time)

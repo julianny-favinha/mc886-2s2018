@@ -61,7 +61,7 @@ def main():
     y_hot_encoding_train = one_hot_encode(y_train, len(labels))
 
     start_time = time.time()
-    network = NNOL(learning_rate=0.0000001, inputLayerSize=785, hiddenLayerSize=256, outputLayerSize=10)
+    network = NNOL(learning_rate=0.0001, inputLayerSize=785, hiddenLayerSize=256, outputLayerSize=10)
 
     epochs = 5
     for epoch in range(epochs):

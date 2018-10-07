@@ -1,10 +1,12 @@
+import sys
 import time
 import numpy as np
 import mnist_reader
 
-from NNOL import NNOL
-from ParseData import prepare_data, segregate_data
 from ErrorMetrics import show_metrics
+from NeuralNetworkOne import NeuralNetworkOne
+from ParseData import prepare_data, segregate_data
+from ActivationFunction import sigmoid, sigmoid_prime, relu, relu_prime
 
 
 labels = {0: "T-shirt/top", 
@@ -33,48 +35,41 @@ def one_hot_encode(array, size):
 
 
 def main():
-    '''
-    Carrega os dados do treinamento
-    '''
-    # x_layer_train, y_layer_train = mnist_reader.load_mnist('fashion-mnist/data/fashion',
-    #                                                        kind='train')
-    # x_layer_validation, y_layer_validation = x_layer_train[1], y_layer_train[1]
-    # x_layer_train, y_layer_train = x_layer_train[0], y_layer_train[0]
-
-    # x_layer_train = x_layer_train / 255
-    # x_layer_validation = x_layer_validation / 255
-
     x_train, y_train = mnist_reader.load_mnist('fashion-mnist/data/fashion', kind='train')
     x_train = prepare_data(x_train)
     x_train, y_train, x_validation, y_validation = segregate_data(x_train, y_train)
 
-
-    # images = 2000
-    # x_train = x_train[0:images]
-    # y_train = y_train[0:images]
-    # x_validation = x_validation[0:images]
-    # y_validation = y_validation[0:images]
-
-    #precisa estar na forma correta: 1,784
-    # x_train = np.array([x_train])
-
-    '''
-    Encoda os targets
-    '''
+    # encode targets
     y_hot_encoding_train = one_hot_encode(y_train, len(labels))
 
     start_time = time.time()
-    network = NNOL(learning_rate=0.001, inputLayerSize=785, hiddenLayerSize=256, outputLayerSize=10)
+
+    # get activation function name
+    try:
+        sys.argv[1]
+    except:
+        print("Execute: python3 TrainNNOLRealDataset.py <sigmoid, relu>")
+        sys.exit()
+
+    activation_function_name = sys.argv[1]
+    
+    activation_function = relu
+    activation_derivative_function = relu_prime
+
+    if activation_function_name == "sigmoid":
+        activation_function = sigmoid
+        activation_derivative_function = sigmoid_prime
+    
+    network = NeuralNetworkOne(learning_rate=0.001, inputLayerSize=785, hiddenLayerSize=256, outputLayerSize=10, activationFunction=activation_function, activationDerivativeFunction=activation_derivative_function)
 
     epochs = 3
-    batch_size = 100
+    batch_size = 200
 
     for epoch in range(epochs):
         delta_acum1 = 0
         delta_acum2 = 0
 
         for batch in range(0, x_train.shape[0], batch_size):
-            # print("Forwarding for epoch", epoch)
             network.forward(x_train[batch: batch + batch_size])
 
             delta1, delta2 = network.cost_prime(x_train[batch: batch + batch_size], y_hot_encoding_train[batch: batch + batch_size])

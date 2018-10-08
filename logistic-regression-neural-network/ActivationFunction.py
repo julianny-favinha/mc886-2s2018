@@ -7,6 +7,7 @@ def sigmoid_prime(z):
 
 
 def sigmoid(z):
+    z = np.clip(z, -100, 100)
     return 1.0 / (1.0 + np.exp(-z))
 
 

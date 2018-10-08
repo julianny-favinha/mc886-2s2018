@@ -23,16 +23,17 @@ class NeuralNetworkOne(object):
         self.z2 = np.dot(x, self.weights1)
         self.a2 = self.activation_function(self.z2)
         self.z3 = np.dot(self.a2, self.weights2)
-        self.a3 = self.activation_function(self.z3)
+        self.a3 = self.softmax(self.z3)
         return self.a3
 
-
-    # def iteration(self, x, y):
-    #     self.a3 = self.forward(x)
-        # self.cost(x, y)
-        # self.cost_prime(x, y)
-        # self.gradient_descent()
-        # return self.j
+    def softmax(self, z):
+        assert len(z.shape) == 2
+        s = np.max(z, axis=1)
+        s = s[:, np.newaxis]
+        e_x = np.exp(z - s)
+        div = np.sum(e_x, axis=1)
+        div = div[:, np.newaxis]
+        return e_x / div
 
 
     def cost(self, x, y):

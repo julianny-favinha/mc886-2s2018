@@ -3,6 +3,7 @@ import time
 import numpy as np
 import mnist_reader
 
+from Cost import plot_cost
 from ErrorMetrics import show_metrics
 from NeuralNetworkOne import NeuralNetworkOne
 from ParseData import prepare_data, segregate_data
@@ -60,12 +61,18 @@ def main():
         activation_function = sigmoid
         activation_derivative_function = sigmoid_prime
     
-    network = NeuralNetworkOne(learning_rate=0.001, inputLayerSize=785, hiddenLayerSize=256, outputLayerSize=10, activationFunction=activation_function, activationDerivativeFunction=activation_derivative_function)
+
+    config = {
+        "learningRate": 0.001
+    }
+
+    network = NeuralNetworkOne(config["learningRate"], inputLayerSize=785, hiddenLayerSize=256, outputLayerSize=10, activationFunction=activation_function, activationDerivativeFunction=activation_derivative_function)
 
     epochs = 3
     batch_size = 200
-
+    cost_iterations = []
     for epoch in range(epochs):
+        print("Forwarding for epoch {}/{}...".format(epoch + 1, epochs))
         delta_acum1 = 0
         delta_acum2 = 0
 
@@ -76,10 +83,11 @@ def main():
             delta_acum1 += delta1
             delta_acum2 += delta2
 
-            cost = network.cost(x_train[batch: batch + batch_size], y_hot_encoding_train[batch: batch + batch_size])
-            print("Cost", cost)
+            cost_iterations.append(network.cost(x_train[batch: batch + batch_size], y_hot_encoding_train[batch: batch + batch_size]))
 
         network.gradient_descent(delta_acum1 / (x_train.shape[0] / batch_size), delta_acum2 / (x_train.shape[0] / batch_size))
+
+    plot_cost(cost_iterations, "NeuralNetwork", len(cost_iterations), config["learningRate"])
 
     network.forward(x_validation)
 

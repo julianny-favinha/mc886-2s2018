@@ -4,7 +4,6 @@ from sklearn.metrics import confusion_matrix, accuracy_score
 
 def show_metrics(predicted, labels, y, file_name):
     cm = confusion_matrix(y, predicted)
-    print("Confusion matrix")
     print(cm)
     fig = plt.figure()
     ax = fig.add_subplot(111)

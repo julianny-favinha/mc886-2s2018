@@ -14,7 +14,7 @@ def show_metrics(predicted, labels, y, file_name):
     ax.set_yticklabels([''] + labels)
     plt.xlabel('Predicted')
     plt.ylabel('True')
-    plt.savefig(file_name, bbox_inches="tight")
+    plt.savefig(file_name.replace("/", "-"), bbox_inches="tight")
     plt.clf()
 
     print("Accuracy score = {0:.1f}%".format((accuracy_score(y, predicted) * 100)))

@@ -50,7 +50,7 @@ def main():
         activation_function_name = sys.argv[1]
         count_hidden_layers = int(sys.argv[2])
     except:
-        print("Execute: python3 TrainNNOLRealDataset.py <sigmoid, relu> <1, 2>")
+        print("Execute: python3 TrainNeuralNetwork.py <sigmoid, relu> <1, 2>")
         sys.exit()
     
     # get activation function
@@ -70,11 +70,15 @@ def main():
         "epochs": 5
     }
 
+    print("Using learningRate = ", config["learningRate"])
+
     network = NeuralNetwork(config["learningRate"], activationFunction=activation_function, activationDerivativeFunction=activation_derivative_function)
     initial_weights = network.init_network(shape)
     cost_iterations, final_weights = network.train(x_train, y_hot_encoding_train, config["epochs"], initial_weights)
 
-    plot_cost(cost_iterations, "NeuralNetwork" + str(count_hidden_layers) + "Layer", len(cost_iterations), config["learningRate"])
+    title = "Neural Network for " + str(count_hidden_layers) + "\n layer using " + activation_function_name.capitalize()
+    file_name = "NeuralNetwork" + str(count_hidden_layers)
+    plot_cost(cost_iterations, title, file_name, len(cost_iterations), config["learningRate"])
 
     # predict validation
     print("Confusion Matrix for validation set")

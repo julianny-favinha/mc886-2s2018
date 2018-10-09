@@ -6,7 +6,7 @@ import mnist_reader
 from Cost import plot_cost
 from ErrorMetrics import show_metrics
 from NeuralNetwork import NeuralNetwork
-from ParseData import prepare_data, segregate_data
+from ParseData import prepare_data, segregate_data, one_hot_encode
 from ActivationFunction import sigmoid, sigmoid_prime, relu, relu_prime
 
 
@@ -20,19 +20,6 @@ labels = {0: "T-shirt/top",
           7: "Sneaker", 
           8: "Bag",
           9: "Ankle boot"}
-
-
-def one_hot_encode(array, size):
-    if not isinstance(array, (list, tuple, np.ndarray)):
-        array = [array]
-    
-    encoded_array = list()
-    for i in array:
-        line = [0 for _ in range(size)]
-        line[i] = 1
-        encoded_array.append(line)
-
-    return np.array(encoded_array)
 
 
 def main():

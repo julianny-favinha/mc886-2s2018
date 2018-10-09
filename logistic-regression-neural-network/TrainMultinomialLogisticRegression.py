@@ -25,7 +25,7 @@ def cross_entropy(thetas, xs, ys):
     return -(1/ys.shape[1]) * sum
 
 def main():
-    x_train, y_train = mnist_reader.load_mnist('fashion-mnist/data/fashion', kind='train')
+    x_train, y_train = mnist_reader.load_mnist("data/fashion", kind="train")
     x_train = prepare_data(x_train)
     x_train, y_train, x_validation, y_validation = segregate_data(x_train, y_train)
 
@@ -60,7 +60,7 @@ def main():
     show_metrics(predicted_class, title, list(labels.keys()), y_validation.tolist(), "ConfusionMatrixMultinomial")
 
     # predict test
-    x_test, y_test = mnist_reader.load_mnist('data/fashion', kind='t10k')
+    x_test, y_test = mnist_reader.load_mnist("data/fashion", kind="t10k")
     x_test = np.c_[np.ones(x_test.shape[0]), x_test]
     print("Predicting for test set...")
     predictions = (mlr.predict(x_test, "Multinomial"))

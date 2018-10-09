@@ -23,7 +23,7 @@ labels = {0: "T-shirt/top",
 
 
 def main():
-    x_train, y_train = mnist_reader.load_mnist('fashion-mnist/data/fashion', kind='train')
+    x_train, y_train = mnist_reader.load_mnist("data/fashion", kind="train")
     x_train = prepare_data(x_train)
     x_train, y_train, x_validation, y_validation = segregate_data(x_train, y_train)
 

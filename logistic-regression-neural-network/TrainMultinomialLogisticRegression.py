@@ -53,19 +53,33 @@ def main():
     file_name = "Multinomial"
     plot_cost(cost_iterations, title, file_name, config["iterations"], config["learningRate"])
 
-    # predict
+    # predict validation
+    print("Predicting for validation set...")
     predictions = (mlr.predict(x_validation, "Multinomial"))
 
-    # find predicted class
     predicted_class = []
     for pred in predictions:
         ind = np.argmax(pred)
         predicted_class.append(ind)
 
-    show_metrics(predicted_class, list(labels.keys()), y_validation.tolist(), "ConfusionMatrixMultinomial")
+    show_metrics(predicted_class, title, list(labels.keys()), y_validation.tolist(), "ConfusionMatrixMultinomial")
+
+    # predict test
+    x_test, y_test = mnist_reader.load_mnist('data/fashion', kind='t10k')
+    x_test = np.c_[np.ones(x_test.shape[0]), x_test]
+    print("Predicting for test set...")
+    predictions = (mlr.predict(x_test, "Multinomial"))
+
+    predicted_class = []
+    for pred in predictions:
+        ind = np.argmax(pred)
+        predicted_class.append(ind)
+
+    show_metrics(predicted_class, title + " Test", list(labels.keys()), y_test.tolist(), "ConfusionMatrixMultinomialTest")
 
     elapsed_time = time.time() - start_time
     print("Elapsed time: %1f s" %(elapsed_time))
+
 
 if __name__ == "__main__":
     main()

@@ -31,7 +31,7 @@ def main():
 
     config = {
         "initialGuess": np.ones((len(labels), x_train.shape[1])),
-        "learningRate": 0.01,
+        "learningRate": 0.1,
         "iterations": 1000
     }
     print(f'Using learning rate = {config["learningRate"]} and {config["iterations"]} iterations')

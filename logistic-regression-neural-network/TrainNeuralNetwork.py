@@ -86,7 +86,7 @@ def main():
     predicted_class = []
     for i in validation_target:
         predicted_class.append(np.argmax(i))
-    show_metrics(predicted_class, list(labels.keys()), y_validation, "ConfusionMatrix" + str(count_hidden_layers))
+    show_metrics(predicted_class, "Neural Network", list(labels.keys()), y_validation, "ConfusionMatrix" + str(count_hidden_layers))
     
     elapsed_time = time.time() - start_time
     print("Elapsed time: %1f s" % elapsed_time)

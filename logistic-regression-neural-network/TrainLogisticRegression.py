@@ -64,7 +64,7 @@ def main():
         title = "One Vs All " + labels[label]
         plot_cost(cost_iterations, title, title.replace(" ", ""), config["iterations"], config["learningRate"])
         binarized_predicted = [1 if p >= 0.5 else 0 for p in predicted]
-        show_metrics(binarized_predicted, ["Not " + labels[label], labels[label]], y_binary_validation, "ConfusionMatrix" + labels[label].replace("/", "-"))
+        show_metrics(binarized_predicted, title, ["Not " + labels[label], labels[label]], y_binary_validation, "ConfusionMatrix" + labels[label].replace("/", "-"))
 
         elapsed_time = time.time() - start_time
         print("Elapsed time: %1f s" %(elapsed_time))
@@ -77,7 +77,7 @@ def main():
         column = predictions[:,i]
         predicted_class.append(np.argmax(column))
     
-    show_metrics(predicted_class, list(labels.keys()), y_validation, "ConfusionMatrixLogisticOneVsAll")
+    show_metrics(predicted_class, "One Vs All", list(labels.keys()), y_validation, "ConfusionMatrixLogisticOneVsAll")
 
 
 if __name__ == "__main__":

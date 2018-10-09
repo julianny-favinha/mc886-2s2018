@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 from Cost import plot_cost
 from ErrorMetrics import show_metrics
-from ParseData import prepare_data, segregate_data
+from ParseData import prepare_data, segregate_data, one_hot_encode
 from MultinomialLogisticRegression import MultinomialLogisticRegression
 
 labels = {0: "T-shirt/top", 
@@ -38,12 +38,7 @@ def main():
 
     start_time = time.time()
 
-    y_hot_encoding = list()
-    for index in y_train:
-        y_line =  [0 for _ in range(len(labels))]
-        y_line[index] = 1
-        y_hot_encoding.append(y_line)
-    y_hot_encoding = np.array(y_hot_encoding)
+    y_hot_encoding = one_hot_encode(y_train, len(labels))
     
     # train
     mlr = MultinomialLogisticRegression(config)

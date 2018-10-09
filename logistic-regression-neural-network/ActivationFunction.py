@@ -2,7 +2,7 @@ import numpy as np
 
 
 def sigmoid_prime(z):
-    sig = 1.0 / (1.0 + np.exp(-z))
+    sig = sigmoid(z)
     return sig * (1 - sig)
 
 

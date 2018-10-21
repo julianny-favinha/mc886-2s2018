@@ -1,6 +1,7 @@
 # data folders
 logistic-regression-neural-network/fashion-mnist/*
 logistic-regression-neural-network/data/*
+unsupervised-learning/health-dataset/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

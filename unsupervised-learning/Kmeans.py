@@ -12,7 +12,7 @@ def apply(X, with_PCA, method, name_method):
     print('K-means ' + with_PCA)
 
     scores = []
-    n_clusters = [x for x in range(10, 11, 10)]
+    n_clusters = [x for x in range(10, 201, 10)]
     
     for n_cluster in n_clusters:
         print(f'Applying for {n_cluster} clusters...')

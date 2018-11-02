@@ -3,12 +3,12 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
-from sklearn.metrics import silhouette_score, davies_bouldin_score
-from sklearn.cluster import KMeans, SpectralClustering, AgglomerativeClustering
+from sklearn.metrics import silhouette_score
 
 
-def apply(X, with_PCA, method, name_method):
+def cluster(X, with_PCA, method, name_method):
     print('K-means ' + with_PCA)
 
     scores = []
@@ -62,12 +62,12 @@ def main():
     bags = pd.read_csv('health-dataset/bags.csv', header=None)
 
     # clustering without PCA
-    apply(bags, '', KMeans, 'Kmeans')
+    cluster(bags, '', KMeans, 'Kmeans')
 
     # clustering with PCA
     pca = PCA(.95)
     reducted_bags = pca.fit_transform(bags)
-    apply(reducted_bags, 'PCA', KMeans, 'Kmeans')
+    cluster(reducted_bags, 'PCA', KMeans, 'Kmeans')
 
 
 if __name__ == '__main__':

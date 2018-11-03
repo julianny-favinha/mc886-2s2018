@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt
 from sklearn.cluster import DBSCAN
 from sklearn.decomposition import PCA
 from sklearn.metrics import silhouette_score
-from sklearn.neighbors import DistanceMetric
 
 
 def cluster(X, with_PCA, method, name_method):

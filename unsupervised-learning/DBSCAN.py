@@ -12,8 +12,8 @@ def cluster(X, with_PCA, method, name_method):
     print('DBSCAN ' + with_PCA)
 
     scores = []
-    epss = [0.05, 0.1, 0.719, 0.769, 0.788, 1.0]
-    min_sampless = [2, 3, 4, 5]
+    epss = [0.719]
+    min_sampless = [2]
 
     for eps in epss:
         for min_samples in min_sampless:
@@ -48,7 +48,10 @@ def cluster(X, with_PCA, method, name_method):
             labels = [x for x in dbscan.labels_ if x != -1]
 
             # compute silhouette score
-            print('Silhouette score:', silhouette_score(X_new, labels))
+            if n_clusters > 1:
+                print('Silhouette score:', silhouette_score(X_new, labels))
+            else:
+                print('Silhouette score cannot be calculated because number of clusters = 1')
             
             elapsed_time = time.time() - start_time
             print('Elapsed time: %1f s'%(elapsed_time))
@@ -59,12 +62,16 @@ def main():
     bags = pd.read_csv('health-dataset/bags.csv', header=None)
 
     # clustering without PCA
-    cluster(bags, '', DBSCAN, 'DBSCAN')
+    # cluster(bags, '', DBSCAN, 'DBSCAN')
 
     # clustering with PCA
     # pca = PCA(.95)
-    # reducted_bags = pca.fit_transform(bags)
-    # cluster(reducted_bags, 'PCA', DBSCAN, 'DBSCAN')
+    # reducted_bags = pd.DataFrame(pca.fit_transform(bags))
+    # cluster(reducted_bags, 'PCA 0 95', DBSCAN, 'DBSCAN')
+
+    pca = PCA(.65)
+    reducted_bags = pd.DataFrame(pca.fit_transform(bags))
+    cluster(reducted_bags, 'PCA 0 65', DBSCAN, 'DBSCAN')
 
 
 if __name__ == '__main__':

@@ -44,15 +44,15 @@ def cluster(X, with_PCA, method, name_method):
         print('Elapsed time: %1f s'%(elapsed_time))
         print()
 
-    plot_scores(n_clusters, scores, 'GraphKMeans' + with_PCA + '.png')
+    plot_scores(n_clusters, scores, with_PCA, 'GraphKMeans' + with_PCA + '.png')
 
 
-def plot_scores(X, Y,  graph_name):
+def plot_scores(X, Y, with_PCA, graph_name):
     fig, ax = plt.subplots()
     ax.plot(X, Y, label='Inertia')
     plt.ylabel('Score')
     plt.xlabel('Number of clusters')
-    plt.title('Kmeans inertia_')
+    plt.title('Kmeans ' + with_PCA + ' inertia_')
     ax.legend()
     plt.savefig(graph_name, bbox_inches='tight')
     plt.gcf().clear()
@@ -67,7 +67,11 @@ def main():
     # clustering with PCA
     pca = PCA(.95)
     reducted_bags = pca.fit_transform(bags)
-    cluster(reducted_bags, 'PCA', KMeans, 'Kmeans')
+    cluster(reducted_bags, 'PCA 0 95', KMeans, 'Kmeans')
+
+    pca = PCA(.65)
+    reducted_bags = pca.fit_transform(bags)
+    cluster(reducted_bags, 'PCA 0 65', KMeans, 'Kmeans')
 
 
 if __name__ == '__main__':

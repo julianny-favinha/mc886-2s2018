@@ -30,7 +30,7 @@ def cluster(X, with_PCA, method, name_method):
             # each cluster has a list of lines of health.txt database
             dic = {i: np.where(dbscan.labels_ == i)[0] for i in range(n_clusters)}
 
-            health = pd.read_csv('health.txt', delimiter='|')
+            health = pd.read_csv('health-dataset/health.txt', delimiter='|')
             headline_text = health['headline_text']
 
             f = open('DictionaryOfClusters' + name_method + with_PCA + '.txt', 'w+')
@@ -59,7 +59,7 @@ def cluster(X, with_PCA, method, name_method):
 
 
 def main():
-    bags = pd.read_csv('bags.csv', header=None)
+    bags = pd.read_csv('health-dataset/bags.csv', header=None)
 
     # clustering without PCA
     # cluster(bags, '', DBSCAN, 'DBSCAN')

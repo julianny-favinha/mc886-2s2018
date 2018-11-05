@@ -2,6 +2,8 @@
 logistic-regression-neural-network/fashion-mnist/*
 logistic-regression-neural-network/data/*
 unsupervised-learning/health-dataset/*
+unsupervised-learning/bags.csv
+unsupervised-learning/health.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

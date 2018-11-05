@@ -23,3 +23,14 @@ https://www.kaggle.com/shivam2503/diamonds
 Using Fashion-MNIST dataset:
 
 https://github.com/zalandoresearch/fashion-mnist
+
+
+*Unsupervised learning techniques*
+
+Using Health News in Twitter Data Set:
+
+https://archive.ics.uci.edu/ml/datasets/Health+News+in+Twitter#
+
+Format: bag of words, download in the link below
+
+https://www.dropbox.com/s/ahkim9u103v0q9i/health-dataset.zip

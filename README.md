@@ -8,22 +8,21 @@ Prof. Sandra Avila
 156059 - Julianny Favinha Donda
 
 155976 - José Henrique Pinto
-
+______________________________________________________________________
 
 *Linear Regression*
 
 Using Diamonds dataset from Kaggle:
 
 https://www.kaggle.com/shivam2503/diamonds
-
-
+______________________________________________________________________
 
 *Logistic Regression and Neural Networks*
 
 Using Fashion-MNIST dataset:
 
 https://github.com/zalandoresearch/fashion-mnist
-
+______________________________________________________________________
 
 *Unsupervised learning techniques*
 

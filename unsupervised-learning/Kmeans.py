@@ -6,13 +6,39 @@ import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
 from sklearn.metrics import silhouette_score
+from sklearn.metrics.pairwise import euclidean_distances
+
+def medoids(X, kmeans, name_method, with_PCA, headline_text, dic):
+
+    f = open('MedoidsOfClusters' + name_method + with_PCA + '.txt', 'w+')
+    
+    for cluster in dic:
+        lines = []
+        if(len(dic[cluster]) > 3):
+            cluster_elems = []
+            cluster_values = []
+            for elem in dic[cluster]:
+                cluster_elems.append(elem)
+                cluster_values.append(X.values[elem])
+            distances = euclidean_distances(cluster_values, [kmeans.cluster_centers_[cluster]], squared=True)
+
+            mins = np.argsort(distances.flatten())[:3]
+            lines = [cluster_elems[x] for x in mins]
+           
+        else:
+            lines = dic[cluster]
+
+        f.write('Medoids Cluster ' + str(cluster) + '\n')
+        f.write('\n'.join([str(x) + ': ' + headline_text[x] for x in lines]) + '\n')
+        f.write('----------------------------------------------------------------------------------------'  + '\n')
+    f.close()   
 
 
 def cluster(X, with_PCA, method, name_method):
     print('K-means ' + with_PCA)
 
     scores = []
-    n_clusters = [x for x in range(10, 301, 10)]
+    n_clusters = [x for x in range(300, 301, 10)]
     
     for n_cluster in n_clusters:
         print(f'Applying for {n_cluster} clusters...')
@@ -32,6 +58,9 @@ def cluster(X, with_PCA, method, name_method):
             f.write('Cluster ' + str(key) + '\n')
             f.write('\n'.join([str(x) + ': ' + headline_text[x] for x in dic[key]]) + '\n')
             f.write('----------------------------------------------------------------------------------------'  + '\n')
+        f.close()
+
+        medoids(X, kmeans, name_method, with_PCA, headline_text, dic)
 
         # compute silhouette score
         print('Silhouette score:', silhouette_score(X, kmeans.labels_))
